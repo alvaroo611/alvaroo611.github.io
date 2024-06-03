@@ -103964,7 +103964,7 @@ i=t.N
 h=t.z
 l=A.b68(A.aP(["xmlFile",A.b7g(m,A.aPr("application","xml",null),"horario.xml")],i,h))
 s=7
-return A.P(o.a.Fh(0,"http://localhost:8088/horarios/send/xml",null,l,null,null,A.aTn("POST",A.aVA(A.aP(["content-type","multipart/form-data"],i,h))),null,h),$async$ye)
+return A.P(o.a.Fh(0,"http://microservices-iesjandula.duckdns.org:8088/horarios/send/xml",null,l,null,null,A.aTn("POST",A.aVA(A.aP(["content-type","multipart/form-data"],i,h))),null,h),$async$ye)
 case 7:k=c
 if(k.c===200){A.dL("Datos cargados correctamente")
 o.am()}else{A.dL("Error al cargar los datos")
