@@ -103916,9 +103916,9 @@ break
 case 5:return A.E(null,r)
 case 1:return A.D(p,r)}})
 return A.F($async$xI,r)},
-PG(){var s,r,q,p=A.a([],t.s)
-for(s=this.a,r=s.length,q=0;q<s.length;s.length===r||(0,A.S)(s),++q)p.push(s[q].a+" ")
-return p}}
+PG(){var s,r,q,p,o=A.a([],t.s)
+for(s=this.a,r=s.length,q=0;q<s.length;s.length===r||(0,A.S)(s),++q){p=s[q]
+o.push(p.a+" "+p.b+" "+p.c)}return o}}
 A.aoF.prototype={
 $1(a){var s=J.Q(a)
 return new A.uD(s.h(a,"name"),s.h(a,"lastName"),s.h(a,"course"),s.h(a,"matriculationYear"),s.h(a,"firstTutorLastName"),s.h(a,"secondTutorLastName"),s.h(a,"tutorName"),s.h(a,"tutorPhone"),s.h(a,"tutorEmail"))},
