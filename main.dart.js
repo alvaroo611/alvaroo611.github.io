@@ -105744,7 +105744,8 @@ l=m.a.c.a.b
 k=m.a.c.a.c
 j=!1
 for(i=0,g=o.b;i<g.length;++i){A.f5().$1(g[i].b)
-if(g[i].b===J.bV(l))j=!0}g=o.c
+if(g[i].b===J.bV(l)){j=!0
+break}}g=o.c
 if(j)A.c8(g,!1).ee("main_screen",k,t.X)
 else{A.bdW(g)
 A.vv()}q=1
