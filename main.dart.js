@@ -105748,8 +105748,12 @@ m=A.afZ(new A.hE(f)).gtx()
 l=m.a.c.a.b
 k=m.a.c.a.c
 j=!1
-for(i=0,g=o.b,e=o.c,d=t.X,c=t.tl;i<g.length;++i){A.f5().$1(g[i].b)
-if(g[i].b===J.bV(l)){j=!0
+i=0,g=o.b,e=o.c,d=t.X,c=t.tl
+case 7:if(!(i<g.length)){s=9
+break}A.f5().$1(g[i].b)
+s=g[i].b===J.bV(l)?10:11
+break
+case 10:j=!0
 b=A.c8(e,!1)
 a=b.C7("main_screen",k,d)
 a.toString
@@ -105757,7 +105761,13 @@ a0=b.e
 a0.a.push(new A.iE(a,null,!1,B.qo,B.cg,new A.oi(new ($.NW())(B.cg),c),B.cg))
 a0.al()
 b.AW()
-b.Ax()}}if(!j){A.bdV(e)
+b.Ax()
+s=12
+return A.P(a.d.a,$async$$0)
+case 12:case 11:case 8:++i
+s=7
+break
+case 9:if(!j){A.bdV(e)
 A.vv()}q=1
 s=5
 break
