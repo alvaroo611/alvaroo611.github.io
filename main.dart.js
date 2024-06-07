@@ -105574,7 +105574,7 @@ g=t.z
 l=A.aVr(A.aN(["csvFile",A.aWu(m,A.y1("text","csv",null),"AlumnadoCentroUnidad.csv")],h,g))
 k=A.t2(null)
 s=7
-return A.P(k.a51("https://microservices-iesjandula.duckdns.org:8088/send/csv-alumnos",l,A.aQz(A.aN(["content-type","multipart/form-data"],h,g)),g),$async$yD)
+return A.P(k.a51("https://microservices-iesjandula.duckdns.org:8088/horarios/send/csv-alumnos",l,A.aQz(A.aN(["content-type","multipart/form-data"],h,g)),g),$async$yD)
 case 7:j=c
 if(j.c===200){A.ds("Datos cargados correctamente de  csv")
 $.aOy().Oo(B.nz,"Datos cargados correctamente",null,null)
