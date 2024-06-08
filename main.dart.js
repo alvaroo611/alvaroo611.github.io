@@ -105816,7 +105816,7 @@ A.v_.prototype={
 En(a,b){return this.azX(a,b)},
 azX(a,b){var s=0,r=A.D(t.H),q=1,p,o=this,n,m,l,k,j,i,h
 var $async$En=A.E(function(c,d){if(c===1){p=d
-s=q}while(true)switch(s){case 0:i=A.fo("https://tu-servidor.com/get/students/visitas/bathroom?fechaInicio="+a+"&fechaFin="+b,0,null)
+s=q}while(true)switch(s){case 0:i=A.fo("https://microservices-iesjandula.duckdns.org:8088"+("horarios/get/students/visitas/bathroom?fechaInicio="+a+"&fechaFin="+b),0,null)
 q=3
 s=6
 return A.O(A.b0f(i),$async$En)
