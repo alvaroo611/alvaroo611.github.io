@@ -108227,7 +108227,7 @@ s=q}while(true)switch(s){case 0:A.kp()
 n=new A.h8(A.aD(t.Gf))
 q=3
 s=6
-return A.O(n.q8("POST",A.fq(u._+("/horarios/student/visita/bathroom?name="+a+"&lastName="+b+"&course="+c),0,null),null,null,null),$async$CE)
+return A.O(n.q8("POST",A.fq(u._+("/horarios/student/regreso/bathroom?name="+a+"&lastName="+b+"&course="+c),0,null),null,null,null),$async$CE)
 case 6:m=e
 if(m.b===200){l=o.c.ab(t.Pu)
 l.toString
