@@ -106756,7 +106756,7 @@ l=A.aW3(A.aO(["xmlFile",A.aX7(m,A.y9("application","xml",null),"horario.xml")],i
 s=7
 return A.O(o.a.a5G("https://microservices-iesjandula.duckdns.org:8088/horarios/send/xml",l,A.aRc(A.aO(["content-type","multipart/form-data"],i,h)),h),$async$yS)
 case 7:k=c
-if(k.c===200){A.cP("Datos cargados correctamente")
+if(k.c===200){A.cP("Datos cargados correctamente de xml")
 $.aPa().OU(B.nG,"Datos cargados correctamente ",null,null)
 A.Tf("INFO","Datos cargados correctamente ")
 o.ar()}else A.cP("Error al cargar los datos")
