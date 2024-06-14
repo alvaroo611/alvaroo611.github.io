@@ -106857,7 +106857,7 @@ return A.B($async$oP,r)},
 Ab(a,b,c){return this.a7Q(a,b,c)},
 a7Q(a,b,c){var s=0,r=A.C(t.Rs),q,p=2,o,n=this,m,l,k,j,i,h,g,f,e,d
 var $async$Ab=A.D(function(a0,a1){if(a0===1){o=a1
-s=p}while(true)switch(s){case 0:e="https://microservices-iesjandula.duckdns.org:8088 horarios/teacher/get/classroom?name="+a+"&lastname="+b
+s=p}while(true)switch(s){case 0:e="https://microservices-iesjandula.duckdns.org:8088 /horarios/teacher/get/classroom?name="+a+"&lastname="+b
 p=4
 s=7
 return A.N(A.b1r(A.fa(e,0,null)),$async$Ab)
