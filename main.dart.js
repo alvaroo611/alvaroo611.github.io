@@ -28095,7 +28095,7 @@ A.js().$1("Servicio Provider inicializado")
 return new A.v_(s,r,q)},
 v_:function v_(a,b,c){var _=this
 _.a=a
-_.f=b
+_.b=b
 _.W$=0
 _.X$=c
 _.aZ$=_.aI$=0},
@@ -99043,7 +99043,7 @@ n=B.aR.da(0,A.Bq(A.Bh(j.e).c.a.h(0,"charset")).da(0,j.w))
 m=A.bb(J.ab(n,"message"))
 A.cy("Respuesta: "+A.l(m))
 f.ae(k).f.lr(A.o_(null,null,null,null,null,B.x,null,A.X(m,null,null,null,null,null,null,null,null,null),null,B.dS,null,null,null,null,null,null,null,null,null))}else{A.cy("Error en la solicitud: "+o.b)
-f.ae(k).f.lr(A.o_(null,null,null,null,null,B.x,null,A.X("Error en la solicitud: "+o.b,null,null,null,null,null,null,null,null,null),null,B.dS,null,null,null,null,null,null,null,null,null))}q=1
+f.ae(k).f.lr(A.o_(null,null,null,null,null,B.x,null,A.X("Error al cargar las visitas de los estudiantes al ba\xf1o.",null,null,null,null,null,null,null,null,null),null,B.dS,null,null,null,null,null,null,null,null,null))}q=1
 s=5
 break
 case 3:q=2
