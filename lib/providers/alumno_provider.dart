@@ -36,11 +36,8 @@ class ProviderAlumno extends ChangeNotifier {
         ),
       });
 
-      // Crear una instancia de Dio
-      Dio _dio = Dio();
-
       // Enviar la solicitud HTTP con Dio
-      Response response = await _dio.post(
+      Response response = await Dio().post(
         WEB_URL + '/horarios/send/csv-alumnos',
         data: formData,
         options: Options(
@@ -51,17 +48,33 @@ class ProviderAlumno extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        print("Datos cargados correctamente de  csv");
-        // Reemplazar con tu servicio de log si es necesario
-        LogService.logInfo("Datos cargados correctamente");
-        // Notificar a los oyentes si estás utilizando algún mecanismo de notificación
+        print("Datos cargados correctamente de CSV");
         notifyListeners();
       } else {
-        print("Error al cargar los datos del csv");
+        throw Exception("Error al cargar los datos del CSV");
       }
     } catch (error) {
       print('Error al cargar el archivo CSV: $error');
+      // Mostrar SnackBar en caso de error
     }
+  }
+
+  Future<List<Student>> fetchStudentsDio() async {
+    try {
+      final response = await _dio.get('$baseUrl/horarios/get/sortstudents');
+      if (response.statusCode == 200) {
+        final data = response.data;
+        _students =
+            List<Student>.from(data.map((item) => Student.fromJson(item)));
+        notifyListeners();
+        return _students;
+      } else {
+        throw Exception('Failed to load students');
+      }
+    } catch (error) {
+      print('Error fetching alumnos: $error');
+    }
+    return _students;
   }
 
   Future<List<Student>> fetchStudents(http.Client client) async {

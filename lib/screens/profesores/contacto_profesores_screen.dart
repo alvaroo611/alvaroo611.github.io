@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:iseneca/models/profesor.dart';
-
-import 'package:iseneca/providers/profesores_provider.dart';
+import 'package:iseneca/models/credenciales_response.dart';
+import 'package:iseneca/providers/credenciales_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:http/http.dart' as http;
 
 class ContactoProfesoresScreen extends StatefulWidget {
   const ContactoProfesoresScreen({Key? key}) : super(key: key);
@@ -15,7 +13,8 @@ class ContactoProfesoresScreen extends StatefulWidget {
 }
 
 class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
-  List<Profesor> profesoresFiltrados = [];
+  List<Credenciales> listaOrdenadaProfesores = [];
+  List<Credenciales> profesoresFiltrados = [];
 
   bool isLoading = true;
   TextEditingController _controller = TextEditingController();
@@ -24,27 +23,34 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final alumnoProvider =
-          Provider.of<ProfesoresProvider>(context, listen: false);
-      _fetchProfesores(alumnoProvider);
+      final credencialesProvider =
+          Provider.of<CredencialesProvider>(context, listen: false);
+      _fetchProfesores(credencialesProvider);
     });
   }
 
-  Future<void> _fetchProfesores(ProfesoresProvider profesorProvider) async {
+  Future<void> _fetchProfesores(
+      CredencialesProvider credencialesProvider) async {
     setState(() {
       isLoading = true;
     });
 
     try {
-      List<Profesor> profesores =
-          await profesorProvider.fetchProfesores(http.Client());
+      await credencialesProvider.getCredencialesUsuario();
+      if (credencialesProvider.listaCredenciales.isEmpty) {
+        Future.delayed(const Duration(seconds: 2), () {
+          _fetchProfesores(credencialesProvider);
+        });
+      }
       setState(() {
-        profesoresFiltrados = profesores;
-        profesoresFiltrados
-            .sort((a, b) => a.nombre.compareTo(b.nombre)); // Ordena por nombre
+        listaOrdenadaProfesores = credencialesProvider.listaCredenciales;
+        listaOrdenadaProfesores.sort((a, b) => a.nombre.compareTo(b.nombre));
+        profesoresFiltrados = List.from(listaOrdenadaProfesores);
       });
     } catch (e) {
-      print('Error al obtener los profesores: $e');
+      Future.delayed(const Duration(seconds: 2), () {
+        _fetchProfesores(credencialesProvider);
+      });
     } finally {
       setState(() {
         isLoading = false;
@@ -55,10 +61,10 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
   void filterSearchResults(String query) {
     setState(() {
       if (query.isEmpty) {
-        // Puedes mantener la lista original si prefieres
+        profesoresFiltrados = List.from(listaOrdenadaProfesores);
       } else {
-        profesoresFiltrados = profesoresFiltrados
-            .where((profesor) => "${profesor.nombre} ${profesor.primerApellido}"
+        profesoresFiltrados = listaOrdenadaProfesores
+            .where((profesor) => "${profesor.nombre} ${profesor.apellidos}"
                 .toLowerCase()
                 .contains(query.toLowerCase()))
             .toList();
@@ -157,7 +163,7 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
                         ),
                       ),
                       title: Text(
-                        "${profesoresFiltrados[index].nombre} ${profesoresFiltrados[index].primerApellido}",
+                        "${profesoresFiltrados[index].nombre} ${profesoresFiltrados[index].apellidos}",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -177,18 +183,27 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
   }
 
   void _mostrarAlert(
-      BuildContext context, int index, List<Profesor> profesores) {
-    Profesor profesor = profesores[index];
+      BuildContext context, int index, List<Credenciales> credenciales) {
+    Credenciales profesor = credenciales[index];
 
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
-          title: Text("${profesor.nombre} ${profesor.primerApellido}"),
+          title: Text("${profesor.nombre} ${profesor.apellidos}"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildContactInfoRow(Icons.mail, "Correo: ${profesor.usuario}",
+                  () => _launchEmail(profesor.usuario)),
+              SizedBox(height: 10),
+              _buildContactInfoRow(
+                  Icons.phone,
+                  "Teléfono: ${profesor.telefono}",
+                  () => _launchPhone(profesor.telefono)),
+            ],
           ),
           actions: [
             TextButton(
