@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:iseneca/models/Student.dart';
 import 'package:iseneca/models/profesor.dart';
 
-import 'package:iseneca/providers/alumnado_provider.dart';
+
 import 'package:iseneca/providers/alumno_provider.dart';
-import 'package:iseneca/providers/profesores_provider.dart';
+
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,27 +41,6 @@ class _ReflexionScreenState extends State<_ReflexionScreen> {
   late List<Student> listadoAlumnos = [];
   late List<Profesor> listadoProfesores = [];
   late ProviderAlumno datosAlumnosProvider;
-  late ProfesoresProvider profesoresProvider;
-  @override
-  void initState() {
-    super.initState();
-    datosAlumnosProvider = Provider.of<ProviderAlumno>(context, listen: false);
-    profesoresProvider =
-        Provider.of<ProfesoresProvider>(context, listen: false);
-    loadData();
-  }
-
-  Future<void> loadData() async {
-    final httpClient = http.Client();
-    final fetchedAlumnos = await datosAlumnosProvider.fetchStudents(httpClient);
-    Future.delayed(const Duration(seconds: 2));
-    final fetchedProfesores =
-        await profesoresProvider.fetchProfesores(httpClient);
-    setState(() {
-      listadoAlumnos = fetchedAlumnos;
-      listadoProfesores = fetchedProfesores;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

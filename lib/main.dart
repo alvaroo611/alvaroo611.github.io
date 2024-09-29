@@ -4,7 +4,7 @@ import 'package:iseneca/firebase_options.dart';
 import 'package:iseneca/providers/alumno_provider.dart';
 import 'package:iseneca/providers/expulsados_provider.dart';
 import 'package:iseneca/providers/providers.dart';
-import 'package:iseneca/providers/xml_provider.dart';
+
 import 'package:iseneca/screens/convivencia/incidencia_telefono_screen.dart';
 import 'package:iseneca/screens/convivencia/reflexion_screen.dart';
 import 'package:iseneca/screens/convivencia/screen_expulsados.dart';
@@ -13,7 +13,7 @@ import 'package:iseneca/screens/convivencia/carnet_screen.dart';
 import 'package:iseneca/screens/screens.dart';
 import 'package:iseneca/service/services.dart';
 import 'package:provider/provider.dart';
-import 'package:iseneca/providers/profesores_provider.dart';
+
 
 //Main
 void main() async {
@@ -49,14 +49,7 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => XmlProvider(),
-          lazy: false,
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ProfesoresProvider(),
-          lazy: false,
-        ),
+       
         ChangeNotifierProvider(
           create: (_) => CredencialesProvider(),
           lazy: false,

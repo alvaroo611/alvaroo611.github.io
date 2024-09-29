@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/providers/alumnado_provider.dart';
 import 'package:iseneca/providers/alumno_provider.dart';
-import 'package:iseneca/providers/xml_provider.dart';
+
 import 'package:iseneca/service/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
@@ -57,23 +57,9 @@ class Content extends StatefulWidget {
 
 class ContentState extends State<Content> {
   final ProviderAlumno _providerAlumno = ProviderAlumno();
-  final XmlProvider _xmlProvider = XmlProvider();
-  @override
-  void initState() {
-    super.initState();
-    _loadXmlData();
-    _loadCsvData();
-  }
 
-  void _loadXmlData() {
-    final httpClient = http.Client();
-    _xmlProvider.loadXmlDataFromFile(httpClient);
-  }
 
-  void _loadCsvData() {
-    final httpClient = http.Client();
-    _providerAlumno.loadCsvDataFromFile(httpClient);
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
