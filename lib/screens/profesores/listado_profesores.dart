@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:iseneca/models/centro_response.dart';
 import 'package:iseneca/models/credenciales_response.dart';
 import 'package:iseneca/models/horario_response.dart';
 import 'package:iseneca/providers/centro_provider.dart';

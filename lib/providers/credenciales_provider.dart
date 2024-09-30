@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/models/credenciales_response.dart';
 import 'package:iseneca/utils/utilidades.dart';
+import 'package:iseneca/utils/google_sheets.dart';
 
 class CredencialesProvider extends ChangeNotifier {
   //Script Google
@@ -18,7 +19,7 @@ class CredencialesProvider extends ChangeNotifier {
 
   getCredencialesUsuario() async {
     const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1qREuUYht73nx_fS2dxm9m6qPs_uvBwsK74dOprmwdjE&sheet=Credenciales";
+        GoogleSheets.credenciales;
     String respuesta = await Utilidades.getJsonData(url);
     respuesta = '{"results":$respuesta}';
     Future.delayed(const Duration(seconds: 2));

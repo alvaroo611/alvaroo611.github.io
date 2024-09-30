@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/models/models.dart';
 import 'package:iseneca/utils/utilidades.dart';
+import 'package:iseneca/utils/google_sheets.dart';
 
 class ConvivenciaProvider extends ChangeNotifier {
   //Script Google
@@ -19,7 +20,7 @@ class ConvivenciaProvider extends ChangeNotifier {
 
   getExpulsados() async {
     const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1ZcdgFdnsp69tXP-S2VVwRM2z3Ucmv2EPrOkH9QIp4nA&sheet=Expulsados";
+        GoogleSheets.expulsados;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final expulsadoResponse = ExpulsadosResponse.fromJson(jsonData);
@@ -30,7 +31,7 @@ class ConvivenciaProvider extends ChangeNotifier {
 
   getMayores() async {
     const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1ZcdgFdnsp69tXP-S2VVwRM2z3Ucmv2EPrOkH9QIp4nA&sheet=Mayores";
+        GoogleSheets.mayores;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final mayorResponse = MayoresResponse.fromJson(jsonData);

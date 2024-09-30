@@ -1,6 +1,3 @@
-import 'package:iseneca/screens/convivencia/incidencia_telefono_screen.dart';
-
-
 class DatosIncidencia {
   DateTime? fecha;
   String? hora;

@@ -1,5 +1,3 @@
-import 'package:iseneca/models/centro_response.dart';
-
 class Asignatura {
   String numIntAs;
   String abreviatura;

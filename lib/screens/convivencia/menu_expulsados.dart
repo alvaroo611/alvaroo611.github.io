@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iseneca/models/expulsados_response.dart';
 import 'package:iseneca/providers/expulsados_provider.dart';
 import 'package:iseneca/utils/human_formats.dart';
-import 'package:iseneca/widgets/side_menu.dart';
 import 'package:provider/provider.dart';
 
 class MenuExpulsados extends StatelessWidget {
@@ -15,6 +14,12 @@ class MenuExpulsados extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expulsados'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: FutureBuilder(
         future: expulsadosProvider.getExpulsados(),
@@ -34,8 +39,7 @@ class MenuExpulsados extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
-                          //_mostrarAlert(context, index, listadoExpulsadosHoy,
-                          //    cogerDatosExpulsados);
+                          
                         },
                         child: ListTile(
                           title: Text(expulsados[index].apellidosNombre),
@@ -60,7 +64,6 @@ class MenuExpulsados extends StatelessWidget {
           }
         },
       ),
-      drawer: const SideMenu(),
     );
   }
 }

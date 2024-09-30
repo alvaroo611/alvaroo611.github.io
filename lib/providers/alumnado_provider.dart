@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/models/models.dart';
 import 'package:iseneca/utils/utilidades.dart';
+import 'package:iseneca/utils/google_sheets.dart';
 
 class AlumnadoProvider extends ChangeNotifier {
   List<DatosAlumnos> listadoAlumnos = [];
@@ -20,7 +21,7 @@ class AlumnadoProvider extends ChangeNotifier {
 
   Future<List<String>> getCursos() async {
     const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=11Y4M52bYFMCIa5uU52vKll2-OY0VtFiGK2PhMWShngg&sheet=Cursos";
+       GoogleSheets.cursos;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final cursosResponse = CursosResponse.fromJson(jsonData);
@@ -34,7 +35,7 @@ class AlumnadoProvider extends ChangeNotifier {
 
   Future<List<dynamic>> getAlumnos(String cursoABuscarAlumnos) async {
     const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=14nffuLY-WILXuAQFMUWNEZIYK08WxI0g1_aK73Ths9Q&sheet=Datos_Alumnado";
+        GoogleSheets.alumnos;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final cursosResponse = AlumnosResponse.fromJson(jsonData);
@@ -49,7 +50,7 @@ class AlumnadoProvider extends ChangeNotifier {
 
   getAlumno() async {
     const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=14nffuLY-WILXuAQFMUWNEZIYK08WxI0g1_aK73Ths9Q&sheet=Datos_Alumnado";
+        GoogleSheets.alumnos;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final cursosResponse = AlumnosResponse.fromJson(jsonData);
@@ -59,7 +60,7 @@ class AlumnadoProvider extends ChangeNotifier {
 
   getHorario() async {
     const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=11Y4M52bYFMCIa5uU52vKll2-OY0VtFiGK2PhMWShngg&sheet=Horarios";
+        GoogleSheets.horarios;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final cursosResponse = HorarioResponse.fromJson(jsonData);

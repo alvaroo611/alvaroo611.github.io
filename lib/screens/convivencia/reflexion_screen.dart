@@ -5,9 +5,6 @@ import 'package:iseneca/models/profesor.dart';
 
 import 'package:iseneca/providers/alumno_provider.dart';
 
-import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-
 class ReflexionScreen extends StatelessWidget {
   const ReflexionScreen({super.key});
 

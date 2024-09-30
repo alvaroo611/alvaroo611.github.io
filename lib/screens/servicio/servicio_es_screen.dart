@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:iseneca/providers/alumno_provider.dart';
 import 'package:iseneca/models/Student.dart';
-import 'package:http/http.dart' as http;
 
 class ServicioESScreen extends StatefulWidget {
   const ServicioESScreen({Key? key}) : super(key: key);

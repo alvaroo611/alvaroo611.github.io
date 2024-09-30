@@ -165,8 +165,6 @@ class _ContactoDetallesAlumnadoScreenState
     String telefonoMadre = alumno.telefonoMadre;
     String mailAlumno = alumno.email;
 
-    TextStyle textStyle = const TextStyle(fontWeight: FontWeight.bold);
-
     showDialog(
       context: context,
       barrierDismissible: true,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/models/models.dart';
-import 'package:iseneca/utils/human_formats.dart';
 import 'package:iseneca/utils/peticion_expulsados.dart';
 
 class ExpulsadosProvider extends ChangeNotifier {

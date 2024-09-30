@@ -1,23 +1,15 @@
 import 'dart:convert';
-import 'dart:async';
-import 'dart:io';
 import 'dart:core';
-import 'package:convert/convert.dart';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 
-import 'package:iseneca/loggers/log.dart';
 import 'package:iseneca/models/Student.dart';
 
 class ProviderAlumno extends ChangeNotifier {
   List<Student> _students = [];
   final String baseUrl =
       'https://script.google.com/macros/s/AKfycbww17NqHZU5opz9SkMtUASKZOg1Hg6KsExRSvlqAMyrx4i0Ax9P5I7IQtKRcnsMKVivdw/exec';
-  final Dio _dio = Dio();
   List<Student> get students => _students;
 
 
