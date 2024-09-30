@@ -57,20 +57,21 @@ class _ContactoDetallesAlumnadoScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "CONTACTO",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60.0),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: screenWidth * 0.9,
+        backgroundColor: Colors.blue,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'ALUMNOS',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Container(
+              width: screenWidth * 0.3,
+              margin: const EdgeInsets.only(left: 20),
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(30),
@@ -90,7 +91,7 @@ class _ContactoDetallesAlumnadoScreenState
                       },
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
-                        hintText: 'Buscar por nombre',
+                        hintText: 'Buscar',
                         hintStyle: TextStyle(color: Colors.white54),
                         border: InputBorder.none,
                       ),
@@ -99,7 +100,13 @@ class _ContactoDetallesAlumnadoScreenState
                 ],
               ),
             ),
-          ),
+          ],
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: alumnosFiltrados.isEmpty

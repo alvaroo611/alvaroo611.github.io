@@ -13,129 +13,195 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
     final listadoHorarios = alumnadoProvider.listadoHorarios;
 
-    // Obtener los días únicos presentes en los horarios
-    Set<String> diasUnicos = listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
-    List<String> diasOrdenados = ["L", "M", "X", "J", "V"].where((dia) => diasUnicos.contains(dia)).toList();
+    Set<String> diasUnicos =
+        listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
+    // Mapear las abreviaturas a los nombres completos
+    List<String> diasOrdenados = ["L", "M", "X", "J", "V"]
+        .where((dia) => diasUnicos.contains(dia))
+        .map((dia) {
+      switch (dia) {
+        case "L":
+          return "Lunes";
+        case "M":
+          return "Martes";
+        case "X":
+          return "Miércoles";
+        case "J":
+          return "Jueves";
+        case "V":
+          return "Viernes";
+        default:
+          return dia;
+      }
+    }).toList();
 
-    // Obtener las horas únicas y ordenarlas
-    Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
-    List<String> horasOrdenadas = horasUnicas.toList()..sort((a, b) => int.parse(a.split(":")[0]).compareTo(int.parse(b.split(":")[0])));
+    Set<String> horasUnicas =
+        listadoHorarios.map((horario) => horario.hora).toSet();
+    List<String> horasOrdenadas = horasUnicas.toList()
+      ..sort((a, b) =>
+          int.parse(a.split(":")[0]).compareTo(int.parse(b.split(":")[0])));
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "HORARIO DE ${listadoAlumnos[index].curso} ",
-          style: const TextStyle(fontSize: 16),
+          "Horario de ${listadoAlumnos[index].curso}", // Nombre completo del alumno
+          style: TextStyle(color: Colors.white),
         ),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
-      body: Container(
-        decoration: const BoxDecoration(color: Colors.white),
-        child: Column(
-          children: [
-            Table(
-              border: TableBorder.all(style: BorderStyle.solid),
-              children: [
-                _buildDiasSemana(diasOrdenados),
-                for (int i = 0; i < horasOrdenadas.length; i++)
-                  _buildHorarioRow(context, index, listadoHorarios, i, diasOrdenados, horasOrdenadas),
-              ],
-            ),
-          ],
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Table(
+                  border: TableBorder.all(color: Colors.blueAccent, width: 2),
+                  defaultColumnWidth: FixedColumnWidth(100.0),
+                  children: [
+                    _buildDiasSemana(diasOrdenados),
+                    for (int i = 0; i < horasOrdenadas.length; i++)
+                      _buildHorarioRow(context, index, listadoHorarios, i,
+                          diasOrdenados, horasOrdenadas),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      blurRadius: 5,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: const [
+                    Text(
+                      "ASIGNATURAS",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    SizedBox(height: 10),
+                    Text("LEN - Lenguaje"),
+                    Text("INF - Informática"),
+                    Text("MAT - Matemáticas"),
+                    Text("EDU - Educación Física"),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   TableRow _buildDiasSemana(List<String> diasOrdenados) {
-    List<Widget> widgetsDias = [Container()];
-
-    for (var dia in diasOrdenados) {
-      widgetsDias.add(
-        Container(
-          color: Colors.blue,
-          child: Center(
-            child: Text(
-              dia,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ),
-        ),
-      );
-    }
-
-    return TableRow(children: widgetsDias);
-  }
-
-  TableRow _buildHorarioRow(BuildContext context, int index, List<HorarioResult> listadoHorarios, int horaDia, List<String> diasOrdenados, List<String> horasOrdenadas) {
-    final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
-    final listadoAlumnos = alumnadoProvider.listadoAlumnos;
-
-    // Filtrar los horarios por el curso del alumno
-    List<HorarioResult> cursoHorarios = listadoHorarios.where((horario) => horario.curso == listadoAlumnos[index].curso).toList();
-
-    // Inicializar widgets para las clases
-    List<Widget> widgetsClases = List.generate(
-      diasOrdenados.length,
-      (numDia) {
-        String asignatura = "";
-        String aula = "";
-
-        // Buscar asignatura y aula correspondiente para cada día y hora
-        for (int i = 0; i < cursoHorarios.length; i++) {
-          if (cursoHorarios[i].dia.startsWith(diasOrdenados[numDia]) && cursoHorarios[i].hora == horasOrdenadas[horaDia]) {
-            asignatura = cursoHorarios[i].asignatura;
-            aula = cursoHorarios[i].aulas;
-            break;
-          }
-        }
-
-        // Construir el widget de clase para este día y hora
-        return Container(
-          color: Colors.white,
-          child: Column(
-            children: [
-              Text(
-                asignatura.isNotEmpty ? asignatura.toUpperCase().substring(0, 3) : '',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
-              Text(
-                aula.toUpperCase(),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-
-    // Construir la fila de horario con la hora y las clases correspondientes
     return TableRow(
       children: [
-        Container(
-          color: Colors.blue,
-          child: Center(
-            child: Text(
-              _formatHourRange(horasOrdenadas[horaDia]),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        ...widgetsClases,
+        _buildTableHeaderCell('Hora'),
+        for (var dia in diasOrdenados) _buildTableHeaderCell(dia),
       ],
     );
   }
 
-  String _formatHourRange(String hour) {
-    final parts = hour.split(":");
-    final startHour = int.parse(parts[0]);
-    final startMinutes = int.parse(parts[1]);
+  TableRow _buildHorarioRow(
+      BuildContext context,
+      int index,
+      List<HorarioResult> listadoHorarios,
+      int horaDia,
+      List<String> diasOrdenados,
+      List<String> horasOrdenadas) {
+    final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
+    final listadoAlumnos = alumnadoProvider.listadoAlumnos;
+    List<HorarioResult> cursoHorarios = listadoHorarios
+        .where((horario) => horario.curso == listadoAlumnos[index].curso)
+        .toList();
 
-    final endHour = startHour + 1;
-    final endMinutes = startMinutes == 30 ? "30" : "00";
+    return TableRow(
+      children: [
+        _buildTableCell(horasOrdenadas[horaDia], isHeader: true),
+        for (var dia in diasOrdenados)
+          _buildHorarioCell(cursoHorarios, dia, horasOrdenadas[horaDia]),
+      ],
+    );
+  }
 
-    return "$hour - $endHour:$endMinutes";
+  Widget _buildTableHeaderCell(String text) {
+    return Container(
+      color: Colors.blueAccent,
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Text(
+          text,
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTableCell(String text, {bool isHeader = false}) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      color: Colors.white, // Color de fondo en blanco
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            color: isHeader ? Colors.black : Colors.black, // Texto en negro
+            fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHorarioCell(
+      List<HorarioResult> cursoHorarios, String dia, String hora) {
+    String asignatura = '';
+    String aula = '';
+
+    for (var horario in cursoHorarios) {
+      if (horario.dia.startsWith(dia.substring(0, 1)) && horario.hora == hora) {
+        asignatura = horario.asignatura;
+        aula = horario.aulas;
+        break;
+      }
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: asignatura.isNotEmpty
+            ? const Color.fromARGB(255, 151, 202, 226) // Azul claro
+            : Colors.white,
+        border: Border.all(color: Colors.blueAccent, width: 1),
+      ),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              asignatura.isNotEmpty
+                  ? asignatura.substring(0, 3).toUpperCase()
+                  : '',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            Text(
+              aula,
+              style: const TextStyle(fontSize: 12, color: Colors.black54),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -13,28 +13,127 @@ class LocalizacionAlumnadoScreen extends StatefulWidget {
 
 class _LocalizacionAlumnadoScreenState
     extends State<LocalizacionAlumnadoScreen> {
+  List<DatosAlumnos> alumnosFiltrados = [];
+  TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final alumnadoProvider =
+        Provider.of<AlumnadoProvider>(context, listen: false);
+    alumnosFiltrados = List.from(alumnadoProvider.listadoAlumnos);
+  }
+
+  void filterSearchResults(String query) {
+    final alumnadoProvider =
+        Provider.of<AlumnadoProvider>(context, listen: false);
+    if (query.isNotEmpty) {
+      setState(() {
+        alumnosFiltrados = alumnadoProvider.listadoAlumnos
+            .where((alumno) =>
+                alumno.nombre.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      });
+    } else {
+      setState(() {
+        alumnosFiltrados = List.from(alumnadoProvider.listadoAlumnos);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
-    final listadoAlumnos = alumnadoProvider.listadoAlumnos;
-    final listadoHorarios = alumnadoProvider.listadoHorarios;
+    double screenWidth = MediaQuery.of(context).size.width;
 
-    List<DatosAlumnos> listaOrdenada = [];
-    listaOrdenada.addAll(listadoAlumnos);
-
-    listaOrdenada.sort((a, b) => a.nombre.compareTo(b.nombre));
     return Scaffold(
-      appBar: AppBar(title: const Text("LOCALIZACION ALUMNOS")),
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'LOCALIZACIÓN',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Container(
+              width: screenWidth * 0.3,
+              margin: const EdgeInsets.only(left: 20),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: Colors.grey),
+              ),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.search, color: Colors.white),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      onChanged: (value) {
+                        filterSearchResults(value);
+                      },
+                      style: const TextStyle(color: Colors.white),
+                      decoration: const InputDecoration(
+                        hintText: 'Buscar',
+                        hintStyle: TextStyle(color: Colors.white54),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: ListView.builder(
-        itemCount: listaOrdenada.length,
+        itemCount: alumnosFiltrados.length,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              _mostrarAlert(
-                  context, index, listaOrdenada[index], listadoHorarios);
+              _mostrarAlert(context, index, alumnosFiltrados[index],
+                  alumnadoProvider.listadoHorarios);
             },
-            child: ListTile(
-              title: Text(listaOrdenada[index].nombre),
+            child: Card(
+              elevation: 5,
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                leading: const Icon(
+                  Icons.school,
+                  color: Colors.blue,
+                  size: 30,
+                ),
+                title: Text(
+                  alumnosFiltrados[index].nombre,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                trailing: const Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.blue,
+                ),
+              ),
             ),
           );
         },
@@ -49,11 +148,10 @@ class _LocalizacionAlumnadoScreenState
     int minutoActual = ahora.minute;
     String diaActual = obtenerDiaSemana(ahora.weekday);
 
-
     // Filtrar los horarios del alumno actual para el día actual
-    List<HorarioResult> horariosAlumno = listadoHorarios.where((horario) =>
-            horario.curso == alumno.curso &&
-            horario.dia.startsWith(diaActual))
+    List<HorarioResult> horariosAlumno = listadoHorarios
+        .where((horario) =>
+            horario.curso == alumno.curso && horario.dia.startsWith(diaActual))
         .toList();
 
     String asignatura = "";
@@ -73,7 +171,8 @@ class _LocalizacionAlumnadoScreenState
 
       // Verificar si la hora actual está dentro del rango de la clase
       if ((horaActual > horaInicioInt ||
-              (horaActual == horaInicioInt && minutoActual >= minutoInicioInt)) &&
+              (horaActual == horaInicioInt &&
+                  minutoActual >= minutoInicioInt)) &&
           (horaActual < horaFinInt ||
               (horaActual == horaFinInt && minutoActual < minutoFinInt))) {
         asignatura = horariosAlumno[i].asignatura;
@@ -84,8 +183,7 @@ class _LocalizacionAlumnadoScreenState
 
     // Construir el mensaje a mostrar en el AlertDialog
     if (aula.isEmpty || asignatura.isEmpty) {
-      texto =
-          "El alumno ${alumno.nombre} no está disponible en este momento";
+      texto = "El alumno ${alumno.nombre} no está disponible en este momento";
     } else {
       texto =
           "El alumno ${alumno.nombre} está actualmente en el aula $aula, en la asignatura $asignatura";
