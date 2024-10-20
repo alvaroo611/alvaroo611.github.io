@@ -13,10 +13,10 @@ class HorarioProfesoresDetallesScreen extends StatefulWidget {
 class _HorarioProfesoresDetallesScreenState
     extends State<HorarioProfesoresDetallesScreen> {
   late Credenciales profesor;
-  late List<HorarioResult> horarios;
-  late List<HorarioResult> horarioProfesor;
   late CentroProvider centroProvider;
-  late Set<String> asignaturasProfesor;
+  late Future<void> _horarioFuture;
+  List<HorarioResult> horarioProfesor = [];
+  Set<String> asignaturasProfesor = {};
 
   final List<String> horas = [
     '8:00 - 9:00',
@@ -34,22 +34,7 @@ class _HorarioProfesoresDetallesScreenState
         ModalRoute.of(context)!.settings.arguments as Credenciales;
     profesor = credenciales;
     centroProvider = Provider.of<CentroProvider>(context, listen: false);
-    _fetchHorario(centroProvider, profesor);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final newProfesor =
-        ModalRoute.of(context)!.settings.arguments as Credenciales?;
-    if (newProfesor != null &&
-        (profesor.nombre != newProfesor.nombre ||
-            profesor.apellidos != newProfesor.apellidos)) {
-      setState(() {
-        profesor = newProfesor;
-      });
-      _fetchHorario(centroProvider, profesor);
-    }
+    _horarioFuture = _fetchHorario(centroProvider, profesor);
   }
 
   Future<void> _fetchHorario(
@@ -57,16 +42,16 @@ class _HorarioProfesoresDetallesScreenState
     Credenciales profesor,
   ) async {
     await horarioProvider.getHorario();
-    horarios = horarioProvider.listaHorariosProfesores.result;
+    final horarios = horarioProvider.listaHorariosProfesores.result;
     setState(() {
       horarioProfesor =
-          obtenerHorarioDelProfesor(profesor.nombre, profesor.apellidos);
+          obtenerHorarioDelProfesor(profesor.nombre, profesor.apellidos, horarios);
       asignaturasProfesor = _obtenerAsignaturasUnicas(horarioProfesor);
     });
   }
 
   List<HorarioResult> obtenerHorarioDelProfesor(
-      String nombre, String apellido) {
+      String nombre, String apellido, List<HorarioResult> horarios) {
     return horarios
         .where((horario) =>
             horario.nombreProfesor == nombre &&
@@ -95,81 +80,67 @@ class _HorarioProfesoresDetallesScreenState
         ),
         backgroundColor: Colors.blue,
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Table(
-                  border: TableBorder.all(color: Colors.blueAccent, width: 2),
-                  defaultColumnWidth: FixedColumnWidth(100.0),
-                  children: [
-                    TableRow(
-                      children: [
-                        _buildTableHeaderCell('Hora'),
-                        _buildTableHeaderCell('Lunes'),
-                        _buildTableHeaderCell('Martes'),
-                        _buildTableHeaderCell('Miércoles'),
-                        _buildTableHeaderCell('Jueves'),
-                        _buildTableHeaderCell('Viernes'),
-                      ],
-                    ),
-                    for (var hora in horas)
-                      TableRow(
-                        children: [
-                          _buildTableCell(hora),
-                          for (var dia in ['L', 'M', 'X', 'J', 'V'])
-                            TableCell(
-                              child: _obtenerCeldaHorario(
-                                  horarioProfesor, dia, hora),
+      body: FutureBuilder(
+        future: _horarioFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error al cargar los datos.'));
+          } else if (horarioProfesor.isEmpty) {
+            return Center(child: Text('No se encontraron datos de horarios.'));
+          } else {
+            return Center(
+              child: ConstrainedBox(  // Este widget asegura que la tabla esté centrada
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.9, // Limitar el ancho de la tabla
+                  maxHeight: MediaQuery.of(context).size.height * 0.9, // Limitar el alto de la tabla
+                ),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center, // Centrado vertical
+                    crossAxisAlignment: CrossAxisAlignment.center, // Centrado horizontal
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Table(
+                          border: TableBorder.all(color: Colors.blueAccent, width: 2),
+                          defaultColumnWidth: FixedColumnWidth(100.0),
+                          children: [
+                            TableRow(
+                              children: [
+                                _buildTableHeaderCell('Hora'),
+                                _buildTableHeaderCell('Lunes'),
+                                _buildTableHeaderCell('Martes'),
+                                _buildTableHeaderCell('Miércoles'),
+                                _buildTableHeaderCell('Jueves'),
+                                _buildTableHeaderCell('Viernes'),
+                              ],
                             ),
-                        ],
+                            for (var hora in horas)
+                              TableRow(
+                                children: [
+                                  _buildTableCell(hora),
+                                  for (var dia in ['L', 'M', 'X', 'J', 'V'])
+                                    TableCell(
+                                      child: _obtenerCeldaHorario(
+                                          horarioProfesor, dia, hora),
+                                    ),
+                                ],
+                              ),
+                          ],
+                        ),
                       ),
-                  ],
+                      const SizedBox(height: 10),
+                      _buildAsignaturasContainer(),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                margin: const EdgeInsets.symmetric(vertical: 20.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.blueAccent),
-                  borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'ASIGNATURAS',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      asignaturasProfesor.map((asignatura) {
-                        final abreviatura =
-                            obtenerTresPrimerasLetras(asignatura);
-                        return '$abreviatura - $asignatura';
-                      }).join('\n'),
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+            );
+          }
+        },
       ),
     );
   }
@@ -232,6 +203,43 @@ class _HorarioProfesoresDetallesScreenState
               ],
             ),
           );
+  }
+
+  Widget _buildAsignaturasContainer() {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 20.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.blueAccent),
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            'ASIGNATURAS',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            asignaturasProfesor.map((asignatura) {
+              final abreviatura = obtenerTresPrimerasLetras(asignatura);
+              return '$abreviatura - $asignatura';
+            }).join('\n'),
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    );
   }
 
   String _obtenerNumeroHora(String hora) {
