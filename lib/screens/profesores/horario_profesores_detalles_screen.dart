@@ -76,7 +76,7 @@ class _HorarioProfesoresDetallesScreenState
       appBar: AppBar(
         title: Text(
           'Horario de ${profesor.nombre} ${profesor.apellidos}',
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blue,
       ),
@@ -84,11 +84,11 @@ class _HorarioProfesoresDetallesScreenState
         future: _horarioFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error al cargar los datos.'));
+            return const Center(child: Text('Error al cargar los datos.'));
           } else if (horarioProfesor.isEmpty) {
-            return Center(child: Text('No se encontraron datos de horarios.'));
+            return const Center(child: Text('No se encontraron datos de horarios.'));
           } else {
             return Center(
               child: ConstrainedBox(  // Este widget asegura que la tabla esté centrada
@@ -106,7 +106,7 @@ class _HorarioProfesoresDetallesScreenState
                         scrollDirection: Axis.horizontal,
                         child: Table(
                           border: TableBorder.all(color: Colors.blueAccent, width: 2),
-                          defaultColumnWidth: FixedColumnWidth(100.0),
+                          defaultColumnWidth: const FixedColumnWidth(100.0),
                           children: [
                             TableRow(
                               children: [
@@ -152,7 +152,7 @@ class _HorarioProfesoresDetallesScreenState
       child: Center(
         child: Text(
           text,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -168,42 +168,60 @@ class _HorarioProfesoresDetallesScreenState
   }
 
   Widget _obtenerCeldaHorario(
-      List<HorarioResult> horarioProfesor, String dia, String hora) {
-    final horario = horarioProfesor.firstWhere(
-        (horario) =>
-            horario.dia == dia + _obtenerNumeroHora(hora) &&
-            horario.hora == hora.split(' ')[0],
-        orElse: () => HorarioResult(
-              curso: '',
-              dia: '',
-              hora: '',
-              asignatura: '',
-              aulas: '',
-              nombreProfesor: '',
-              apellidoProfesor: '',
-            ));
-    final abreviatura = obtenerTresPrimerasLetras(horario.asignatura);
-    return horario.asignatura.isEmpty
-        ? Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blueAccent, width: 1),
-            ),
-            child: const SizedBox.shrink())
-        : Container(
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 151, 202, 226),
-              border: Border.all(color: Colors.blueAccent, width: 1),
-            ),
+    List<HorarioResult> horarioProfesor, String dia, String hora) {
+  final horario = horarioProfesor.firstWhere(
+      (horario) =>
+          horario.dia == dia + _obtenerNumeroHora(hora) &&
+          horario.hora == hora.split(' ')[0],
+      orElse: () => HorarioResult(
+            curso: '',
+            dia: '',
+            hora: '',
+            asignatura: '',
+            aulas: '',
+            nombreProfesor: '',
+            apellidoProfesor: '',
+          ));
+  final abreviatura = obtenerTresPrimerasLetras(horario.asignatura);
+
+  return horario.asignatura.isEmpty
+      ? Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.blueAccent, width: 1),
+          ),
+          child: const SizedBox.shrink(),
+        )
+      : Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 151, 202, 226),
+            border: Border.all(color: Colors.blueAccent, width: 1),
+          ),
+          child: Center(  // Añadido para centrar el contenido
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('$abreviatura - ${horario.asignatura}'),
-                Text(horario.aulas),
+                Text(
+                  abreviatura,
+                  style: const TextStyle(
+                    fontSize: 16, 
+                    fontWeight: FontWeight.bold, 
+                  ),
+                ),
+                const SizedBox(height: 4), 
+                Text(
+                  horario.aulas,
+                  style: const TextStyle(
+                    fontSize: 14, 
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
               ],
             ),
-          );
-  }
+          ),
+        );
+}
+
 
   Widget _buildAsignaturasContainer() {
     return Container(
@@ -218,7 +236,7 @@ class _HorarioProfesoresDetallesScreenState
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -235,7 +253,7 @@ class _HorarioProfesoresDetallesScreenState
               final abreviatura = obtenerTresPrimerasLetras(asignatura);
               return '$abreviatura - $asignatura';
             }).join('\n'),
-            style: TextStyle(fontSize: 14),
+            style: const TextStyle(fontSize: 14),
           ),
         ],
       ),
