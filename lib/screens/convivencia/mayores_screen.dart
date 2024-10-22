@@ -5,41 +5,50 @@ import 'package:iseneca/providers/providers.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:intl/intl.dart';
 
+
 class MayoresScreen extends StatefulWidget {
   const MayoresScreen({super.key});
+
 
   @override
   _MayoresScreenState createState() => _MayoresScreenState();
 }
 
+
 class _MayoresScreenState extends State<MayoresScreen> {
   DateTime? selectedDate;
+
 
   @override
   Widget build(BuildContext context) {
     final mayoresProvider = Provider.of<ConvivenciaProvider>(context);
     final listadoMayores = mayoresProvider.listaMayores;
 
+
     final datosAlumnosProvider = Provider.of<AlumnadoProvider>(context);
     final listadoAlumnos = datosAlumnosProvider.listadoAlumnos;
 
+
     List<Mayor> listadoMayoresHoy = [];
     List<DatosAlumnos> cogerDatosMayores = [];
+
 
     for (int i = 0; i < listadoMayores.length; i++) {
       listadoMayoresHoy.add(listadoMayores[i]);
       listadoMayoresHoy.sort((a, b) => b.fecFin.compareTo(a.fecFin));
     }
 
+
     if (selectedDate != null) {
       listadoMayoresHoy = listadoMayoresHoy.where((mayor) {
         DateTime fecInic = DateTime.parse(mayor.fecInic);
         DateTime fecFin = DateTime.parse(mayor.fecFin);
         return selectedDate!.isAtSameMomentAs(fecInic) ||
-               selectedDate!.isAtSameMomentAs(fecFin) ||
-               (selectedDate!.isAfter(fecInic) && selectedDate!.isBefore(fecFin));
+            selectedDate!.isAtSameMomentAs(fecFin) ||
+            (selectedDate!.isAfter(fecInic) && selectedDate!.isBefore(fecFin));
       }).toList();
     }
+
 
     for (int i = 0; i < listadoMayoresHoy.length; i++) {
       for (int j = 0; j < listadoAlumnos.length; j++) {
@@ -49,9 +58,11 @@ class _MayoresScreenState extends State<MayoresScreen> {
       }
     }
 
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mayores'),
+        backgroundColor: Colors.blue,
       ),
       body: Column(
         children: [
@@ -59,42 +70,77 @@ class _MayoresScreenState extends State<MayoresScreen> {
             onPressed: () {
               _selectDate(context);
             },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blueAccent,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            ),
             child: Text(
               selectedDate == null
                   ? "Seleccionar Fecha"
                   : DateFormat('dd/MM/yyyy').format(selectedDate!),
+              style: const TextStyle(color: Colors.white),
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: listadoMayoresHoy.length,
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {
-                    _mostrarAlert(
-                        context, index, cogerDatosMayores, listadoMayoresHoy);
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                ),
+                child: ListView.builder(
+                  itemCount: listadoMayoresHoy.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        _mostrarAlert(
+                            context, index, cogerDatosMayores, listadoMayoresHoy);
+                      },
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
+                        child: ListTile(
+                          title: Text(
+                            listadoMayoresHoy[index].apellidosNombre,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                listadoMayoresHoy[index].fecInic,
+                                style: const TextStyle(color: Colors.blue),
+                              ),
+                              const Text(" - "),
+                              Text(
+                                listadoMayoresHoy[index].fecFin,
+                                style: const TextStyle(color: Colors.blue),
+                              ),
+                            ],
+                          ),
+                          subtitle: Text(listadoMayoresHoy[index].curso),
+                          leading: Text(
+                            listadoMayoresHoy[index].aula,
+                            style: const TextStyle(
+                                color: Colors.blue, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    );
                   },
-                  child: ListTile(
-                    title: Text(listadoMayoresHoy[index].apellidosNombre),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(listadoMayoresHoy[index].fecInic),
-                        const Text(" - "),
-                        Text(listadoMayoresHoy[index].fecFin)
-                      ],
-                    ),
-                    subtitle: Text(listadoMayoresHoy[index].curso),
-                    leading: Text(listadoMayoresHoy[index].aula),
-                  ),
-                );
-              },
+                ),
+              ),
             ),
           ),
         ],
       ),
     );
   }
+
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
@@ -106,12 +152,14 @@ class _MayoresScreenState extends State<MayoresScreen> {
       lastDate: now,
     );
 
+
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
     }
   }
+
 
   void _mostrarAlert(BuildContext context, int index,
       List<DatosAlumnos> cogerDatosMayores, List<Mayor> listadoMayoresHoy) {
@@ -120,6 +168,7 @@ class _MayoresScreenState extends State<MayoresScreen> {
         barrierDismissible: true,
         builder: (context) {
           TextStyle textStyle = const TextStyle(fontWeight: FontWeight.bold);
+
 
           return AlertDialog(
             insetPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
