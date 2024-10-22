@@ -15,7 +15,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
 
     Set<String> diasUnicos =
         listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
-    // Mapear las abreviaturas a los nombres completos
+
     List<String> diasOrdenados = ["L", "M", "X", "J", "V"]
         .where((dia) => diasUnicos.contains(dia))
         .map((dia) {
@@ -44,8 +44,8 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Horario de ${listadoAlumnos[index].curso}", // Nombre completo del alumno
-          style: TextStyle(color: Colors.white),
+          "Horario de ${listadoAlumnos[index].curso}", // Nombre del curso del alumno
+          style: const TextStyle(color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Colors.blue,
@@ -59,7 +59,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Table(
                   border: TableBorder.all(color: Colors.blueAccent, width: 2),
-                  defaultColumnWidth: FixedColumnWidth(100.0),
+                  defaultColumnWidth: const FixedColumnWidth(100.0),
                   children: [
                     _buildDiasSemana(diasOrdenados),
                     for (int i = 0; i < horasOrdenadas.length; i++)
@@ -69,34 +69,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      blurRadius: 5,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: const [
-                    Text(
-                      "ASIGNATURAS",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    SizedBox(height: 10),
-                    Text("LEN - Lenguaje"),
-                    Text("INF - Informática"),
-                    Text("MAT - Matemáticas"),
-                    Text("EDU - Educación Física"),
-                  ],
-                ),
-              ),
+              _buildAsignaturasContainer(context, index),
             ],
           ),
         ),
@@ -152,12 +125,12 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
   Widget _buildTableCell(String text, {bool isHeader = false}) {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      color: Colors.white, // Color de fondo en blanco
+      color: Colors.white,
       child: Center(
         child: Text(
           text,
           style: TextStyle(
-            color: isHeader ? Colors.black : Colors.black, // Texto en negro
+            color: isHeader ? Colors.black : Colors.black,
             fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -182,7 +155,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: asignatura.isNotEmpty
-            ? const Color.fromARGB(255, 151, 202, 226) // Azul claro
+            ? const Color.fromARGB(255, 151, 202, 226)
             : Colors.white,
         border: Border.all(color: Colors.blueAccent, width: 1),
       ),
@@ -203,5 +176,61 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Widget que muestra las asignaturas dinámicamente según el horario del alumno
+  Widget _buildAsignaturasContainer(BuildContext context, int index) {
+    final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
+    final listadoHorarios = alumnadoProvider.listadoHorarios;
+    final listadoAlumnos = alumnadoProvider.listadoAlumnos;
+
+    // Obtener las asignaturas únicas del horario del alumno
+    List<HorarioResult> cursoHorarios = listadoHorarios
+        .where((horario) => horario.curso == listadoAlumnos[index].curso)
+        .toList();
+    Set<String> asignaturasUnicas =
+        cursoHorarios.map((horario) => horario.asignatura).toSet();
+
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 20.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.blueAccent),
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            'ASIGNATURAS',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            asignaturasUnicas.map((asignatura) {
+              final abreviatura = obtenerTresPrimerasLetras(asignatura);
+              return '$abreviatura - $asignatura';
+            }).join('\n'),
+            style: const TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Método para obtener las primeras tres letras de una asignatura
+  String obtenerTresPrimerasLetras(String asignatura) {
+    return asignatura.length > 3
+        ? asignatura.substring(0, 3).toUpperCase()
+        : asignatura.toUpperCase();
   }
 }

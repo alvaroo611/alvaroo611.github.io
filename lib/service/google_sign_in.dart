@@ -25,11 +25,8 @@ class GoogleSignInState extends State<GoogleSignIn> {
       credencialesProvider =
           Provider.of<CredencialesProvider>(context, listen: false);
       _loadCredenciales();
-      
     });
-
   }
-  
 
   // Método para cargar las credenciales y reintentar en caso de fallo
   void _loadCredenciales() async {
