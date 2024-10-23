@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:iseneca/providers/alumnado_provider.dart';
 import 'package:iseneca/models/horario_response.dart';
@@ -86,27 +87,40 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     );
   }
 
-  TableRow _buildHorarioRow(
-      BuildContext context,
-      int index,
-      List<HorarioResult> listadoHorarios,
-      int horaDia,
-      List<String> diasOrdenados,
-      List<String> horasOrdenadas) {
-    final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
-    final listadoAlumnos = alumnadoProvider.listadoAlumnos;
-    List<HorarioResult> cursoHorarios = listadoHorarios
-        .where((horario) => horario.curso == listadoAlumnos[index].curso)
-        .toList();
+ TableRow _buildHorarioRow(
+    BuildContext context,
+    int index,
+    List<HorarioResult> listadoHorarios,
+    int horaDia,
+    List<String> diasOrdenados,
+    List<String> horasOrdenadas) {
+  final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
+  final listadoAlumnos = alumnadoProvider.listadoAlumnos;
+  List<HorarioResult> cursoHorarios = listadoHorarios
+      .where((horario) => horario.curso == listadoAlumnos[index].curso)
+      .toList();
 
-    return TableRow(
-      children: [
-        _buildTableCell(horasOrdenadas[horaDia], isHeader: true),
-        for (var dia in diasOrdenados)
-          _buildHorarioCell(cursoHorarios, dia, horasOrdenadas[horaDia]),
-      ],
-    );
-  }
+  // Obtener la hora inicial y calcular la hora final sumando 1 hora
+  String horaInicio = horasOrdenadas[horaDia];
+  String horaFinal = _calcularHoraFinal(horaInicio);
+
+  return TableRow(
+    children: [
+      _buildTableCell('$horaInicio - $horaFinal', isHeader: true), // Mostrar el rango de horas
+      for (var dia in diasOrdenados)
+        _buildHorarioCell(cursoHorarios, dia, horasOrdenadas[horaDia]),
+    ],
+  );
+}
+
+// Función para sumar 1 hora a la hora de inicio
+String _calcularHoraFinal(String horaInicio) {
+  final formatoHora = DateFormat("HH:mm");
+  DateTime horaInicial = formatoHora.parse(horaInicio);
+  DateTime horaFinal = horaInicial.add(Duration(hours: 1));
+  return formatoHora.format(horaFinal);
+}
+
 
   Widget _buildTableHeaderCell(String text) {
     return Container(
@@ -122,21 +136,21 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTableCell(String text, {bool isHeader = false}) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      color: Colors.white,
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(
-            color: isHeader ? Colors.black : Colors.black,
-            fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-          ),
+ Widget _buildTableCell(String text, {bool isHeader = false}) {
+  return Container(
+    padding: const EdgeInsets.all(8.0),
+    color: Colors.white,
+    child: Center(
+      child: Text(
+        text,
+        style: TextStyle(
+          color: isHeader ? Colors.black : Colors.black,
+          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildHorarioCell(
       List<HorarioResult> cursoHorarios, String dia, String hora) {

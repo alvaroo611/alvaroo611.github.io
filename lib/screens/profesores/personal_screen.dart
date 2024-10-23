@@ -59,7 +59,7 @@ class PersonalScreen extends StatelessWidget {
                 leading: FaIcon(FontAwesomeIcons.peopleCarry,
                     color: Color.fromARGB(255, 96, 153, 199)),
                 title: Text(
-                  'Profesores',
+                  'Localización',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,

@@ -140,79 +140,202 @@ class _LocalizacionAlumnadoScreenState
       ),
     );
   }
+void _mostrarAlert(BuildContext context, int index, DatosAlumnos alumno,
+    List<HorarioResult> listadoHorarios) {
+  DateTime ahora = DateTime.now();
+  int horaActual = ahora.hour;
+  int minutoActual = ahora.minute;
+  String diaActual = obtenerDiaSemana(ahora.weekday);
 
-  void _mostrarAlert(BuildContext context, int index, DatosAlumnos alumno,
-      List<HorarioResult> listadoHorarios) {
-    DateTime ahora = DateTime.now();
-    int horaActual = ahora.hour;
-    int minutoActual = ahora.minute;
-    String diaActual = obtenerDiaSemana(ahora.weekday);
+  // Filtrar los horarios del alumno actual para el día actual
+  List<HorarioResult> horariosAlumno = listadoHorarios
+      .where((horario) =>
+          horario.curso == alumno.curso && horario.dia.startsWith(diaActual))
+      .toList();
 
-    // Filtrar los horarios del alumno actual para el día actual
-    List<HorarioResult> horariosAlumno = listadoHorarios
-        .where((horario) =>
-            horario.curso == alumno.curso && horario.dia.startsWith(diaActual))
-        .toList();
+  String asignatura = "";
+  String aula = "";
+  String hora = "";
 
-    String asignatura = "";
-    String aula = "";
-    String texto = "";
+  // Iterar sobre los horarios del alumno actual
+  for (int i = 0; i < horariosAlumno.length; i++) {
+    String horaInicio = horariosAlumno[i].hora;
+    String horaFin = sumarHora(horaInicio);
 
-    // Iterar sobre los horarios del alumno actual
-    for (int i = 0; i < horariosAlumno.length; i++) {
-      String horaInicio = horariosAlumno[i].hora;
-      String horaFin = sumarHora(horaInicio);
+    // Convertir horas a enteros para la comparación
+    int horaInicioInt = int.parse(horaInicio.split(":")[0]);
+    int minutoInicioInt = int.parse(horaInicio.split(":")[1]);
+    int horaFinInt = int.parse(horaFin.split(":")[0]);
+    int minutoFinInt = int.parse(horaFin.split(":")[1]);
 
-      // Convertir horas a enteros para la comparación
-      int horaInicioInt = int.parse(horaInicio.split(":")[0]);
-      int minutoInicioInt = int.parse(horaInicio.split(":")[1]);
-      int horaFinInt = int.parse(horaFin.split(":")[0]);
-      int minutoFinInt = int.parse(horaFin.split(":")[1]);
-
-      // Verificar si la hora actual está dentro del rango de la clase
-      if ((horaActual > horaInicioInt ||
-              (horaActual == horaInicioInt &&
-                  minutoActual >= minutoInicioInt)) &&
-          (horaActual < horaFinInt ||
-              (horaActual == horaFinInt && minutoActual < minutoFinInt))) {
-        asignatura = horariosAlumno[i].asignatura;
-        aula = horariosAlumno[i].aulas;
-        break; // Se encontró la clase, salir del bucle
-      }
+    // Verificar si la hora actual está dentro del rango de la clase
+    if ((horaActual > horaInicioInt ||
+            (horaActual == horaInicioInt &&
+                minutoActual >= minutoInicioInt)) &&
+        (horaActual < horaFinInt ||
+            (horaActual == horaFinInt && minutoActual < minutoFinInt))) {
+      asignatura = horariosAlumno[i].asignatura;
+      aula = horariosAlumno[i].aulas;
+      hora = horariosAlumno[i].hora;
+      break; // Se encontró la clase, salir del bucle
     }
-
-    // Construir el mensaje a mostrar en el AlertDialog
-    if (aula.isEmpty || asignatura.isEmpty) {
-      texto = "El alumno ${alumno.nombre} no está disponible en este momento";
-    } else {
-      texto =
-          "El alumno ${alumno.nombre} está actualmente en el aula $aula, en la asignatura $asignatura";
-    }
-
-    // Mostrar el AlertDialog
-    _mostrarDialog(context, alumno.nombre, texto);
   }
 
-  void _mostrarDialog(BuildContext context, String titulo, String contenido) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text(titulo),
-          content: Text(contenido),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cerrar"),
+  // Si no se encuentra la asignatura o el aula
+  if (aula.isEmpty || asignatura.isEmpty) {
+    _mostrarDialogInformacionNoDisponible(context);
+  } else {
+    _mostrarDialog(context, alumno, aula, hora, asignatura);
+  }
+}
+
+void _mostrarDialog(BuildContext context, DatosAlumnos alumno, String aula, String hora, String asignatura) {
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        backgroundColor: Colors.white,
+        title: Row(
+          children: [
+            const Icon(
+              Icons.info,
+              color: Colors.green,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Horario Actual de ${alumno.nombre}',
+                style: const TextStyle(color: Colors.black),
+              ),
             ),
           ],
-        );
-      },
-    );
-  }
+        ),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Row(
+                children: [
+                  const Icon(Icons.school, color: Colors.blue),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Curso: ${alumno.curso}',
+                    style: const TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const Icon(Icons.access_time, color: Colors.blue),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Hora: $hora',
+                    style: const TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const Icon(Icons.book, color: Colors.blue),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Asignatura: $asignatura',
+                    style: const TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const Icon(Icons.location_on, color: Colors.blue),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Aula en la que se encuentra: $aula',
+                    style: const TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+            child: const Text(
+              'Cerrar',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _mostrarDialogInformacionNoDisponible(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        backgroundColor: Colors.white,
+        title: Row(
+          children: [
+            const Icon(
+              Icons.error,
+              color: Colors.red,
+            ),
+            const SizedBox(width: 10),
+            const Expanded(
+              child: Text(
+                'Información No Disponible',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        ),
+        content: const Text(
+          'El alumno seleccionado no tiene clase en la hora actual.',
+          style: TextStyle(color: Colors.black),
+        ),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+            child: const Text(
+              'Cerrar',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   // Función para sumar una hora a la hora inicial
   String sumarHora(String hora) {
