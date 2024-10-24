@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:iseneca/models/credenciales_response.dart';
-import 'package:iseneca/models/horario_response.dart';
-import 'package:iseneca/providers/centro_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:iseneca/providers/centro_provider.dart';
+import 'package:iseneca/models/horario_response.dart';
 
 class HorarioProfesoresDetallesScreen extends StatefulWidget {
   @override
@@ -17,15 +18,6 @@ class _HorarioProfesoresDetallesScreenState
   late Future<void> _horarioFuture;
   List<HorarioResult> horarioProfesor = [];
   Set<String> asignaturasProfesor = {};
-
-  final List<String> horas = [
-    '8:00 - 9:00',
-    '9:00 - 10:00',
-    '10:00 - 11:00',
-    '11:30 - 12:30',
-    '12:30 - 13:30',
-    '13:30 - 14:30'
-  ];
 
   @override
   void initState() {
@@ -59,90 +51,105 @@ class _HorarioProfesoresDetallesScreenState
         .toList();
   }
 
-  Set<String> _obtenerAsignaturasUnicas(List<HorarioResult> horarioProfesor) {
-    return horarioProfesor.map((horario) => horario.asignatura).toSet();
-  }
-
-  String obtenerTresPrimerasLetras(String texto) {
-    if (texto.length < 3) {
-      return texto.toUpperCase();
-    }
-    return texto.substring(0, 3).toUpperCase();
+  Set<String> _obtenerAsignaturasUnicas(List<HorarioResult> horarios) {
+    return horarios.map((horario) => horario.asignatura).toSet();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Horario de ${profesor.nombre} ${profesor.apellidos}',
-          style: const TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.blue,
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text(
+        "Horario de ${profesor.nombre} ${profesor.apellidos}",
+        style: const TextStyle(color: Colors.white),
       ),
-      body: FutureBuilder(
-        future: _horarioFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Error al cargar los datos.'));
-          } else if (horarioProfesor.isEmpty) {
-            return const Center(child: Text('No se encontraron datos de horarios.'));
-          } else {
-            return Center(
-              child: ConstrainedBox(  // Este widget asegura que la tabla estÃ© centrada
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.9, // Limitar el ancho de la tabla
-                  maxHeight: MediaQuery.of(context).size.height * 0.9, // Limitar el alto de la tabla
-                ),
+      centerTitle: true,
+      backgroundColor: Colors.blue,
+    ),
+    body: FutureBuilder<void>(
+      future: _horarioFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        List<String> diasOrdenados = ["L", "M", "X", "J", "V"];
+        List<String> diasNombres = [
+          "Lunes",
+          "Martes",
+          "Miércoles",
+          "Jueves",
+          "Viernes"
+        ];
+
+        Set<String> horasUnicas =
+            horarioProfesor.map((horario) => horario.hora).toSet();
+        List<String> horasOrdenadas = horasUnicas.toList()
+          ..sort((a, b) =>
+              int.parse(a.split(":")[0]).compareTo(int.parse(b.split(":")[0])));
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.9), // Espacio adaptable
+              Center( // Centro el horario
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center, // Centrado vertical
-                    crossAxisAlignment: CrossAxisAlignment.center, // Centrado horizontal
+                  scrollDirection: Axis.horizontal,
+                  child: Table(
+                    border: TableBorder.all(color: Colors.blueAccent, width: 2),
+                    defaultColumnWidth: const FixedColumnWidth(100.0),
                     children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Table(
-                          border: TableBorder.all(color: Colors.blueAccent, width: 2),
-                          defaultColumnWidth: const FixedColumnWidth(100.0),
-                          children: [
-                            TableRow(
-                              children: [
-                                _buildTableHeaderCell('Hora'),
-                                _buildTableHeaderCell('Lunes'),
-                                _buildTableHeaderCell('Martes'),
-                                _buildTableHeaderCell('MiÃ©rcoles'),
-                                _buildTableHeaderCell('Jueves'),
-                                _buildTableHeaderCell('Viernes'),
-                              ],
-                            ),
-                            for (var hora in horas)
-                              TableRow(
-                                children: [
-                                  _buildTableCell(hora),
-                                  for (var dia in ['L', 'M', 'X', 'J', 'V'])
-                                    TableCell(
-                                      child: _obtenerCeldaHorario(
-                                          horarioProfesor, dia, hora),
-                                    ),
-                                ],
-                              ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      _buildAsignaturasContainer(),
+                      _buildDiasSemana(diasNombres),
+                      for (int i = 0; i < horasOrdenadas.length; i++)
+                        _buildHorarioRow(i, diasOrdenados, horasOrdenadas),
                     ],
                   ),
                 ),
               ),
-            );
-          }
-        },
-      ),
+              const SizedBox(height: 20),
+              Center( // Centro el contenedor de asignaturas
+                child: _buildAsignaturasContainer(),
+              ),
+            ],
+          ),
+        );
+      },
+    ),
+  );
+}
+
+
+  TableRow _buildDiasSemana(List<String> diasNombres) {
+    return TableRow(
+      children: [
+        _buildTableHeaderCell('Hora'),
+        for (var dia in diasNombres) _buildTableHeaderCell(dia),
+      ],
     );
+  }
+
+  TableRow _buildHorarioRow(int horaDia, List<String> diasOrdenados, List<String> horasOrdenadas) {
+    String horaInicio = horasOrdenadas[horaDia];
+    String horaFinal = _calcularHoraFinal(horaInicio);
+
+    return TableRow(
+      children: [
+        _buildTableCell('$horaInicio - $horaFinal', isHeader: true),
+        for (var dia in diasOrdenados) 
+          _buildHorarioCell(dia, horasOrdenadas[horaDia]),
+      ],
+    );
+  }
+
+  String _calcularHoraFinal(String horaInicio) {
+    final formatoHora = DateFormat("HH:mm");
+    DateTime horaInicial = formatoHora.parse(horaInicio);
+    DateTime horaFinal = horaInicial.add(Duration(hours: 1));
+    return formatoHora.format(horaFinal);
   }
 
   Widget _buildTableHeaderCell(String text) {
@@ -158,70 +165,60 @@ class _HorarioProfesoresDetallesScreenState
     );
   }
 
-  Widget _buildTableCell(String text) {
+  Widget _buildTableCell(String text, {bool isHeader = false}) {
     return Container(
       padding: const EdgeInsets.all(8.0),
+      color: Colors.white,
       child: Center(
-        child: Text(text),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: isHeader ? Colors.black : Colors.black,
+            fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
       ),
     );
   }
 
-  Widget _obtenerCeldaHorario(
-    List<HorarioResult> horarioProfesor, String dia, String hora) {
-  final horario = horarioProfesor.firstWhere(
-      (horario) =>
-          horario.dia == dia + _obtenerNumeroHora(hora) &&
-          horario.hora == hora.split(' ')[0],
-      orElse: () => HorarioResult(
-            curso: '',
-            dia: '',
-            hora: '',
-            asignatura: '',
-            aulas: '',
-            nombreProfesor: '',
-            apellidoProfesor: '',
-          ));
-  final abreviatura = obtenerTresPrimerasLetras(horario.asignatura);
+  Widget _buildHorarioCell(String dia, String hora) {
+    String asignatura = '';
+    String aula = '';
 
-  return horario.asignatura.isEmpty
-      ? Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.blueAccent, width: 1),
-          ),
-          child: const SizedBox.shrink(),
-        )
-      : Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 151, 202, 226),
-            border: Border.all(color: Colors.blueAccent, width: 1),
-          ),
-          child: Center(  // AÃ±adido para centrar el contenido
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  abreviatura,
-                  style: const TextStyle(
-                    fontSize: 16, 
-                    fontWeight: FontWeight.bold, 
-                  ),
-                ),
-                const SizedBox(height: 4), 
-                Text(
-                  horario.aulas,
-                  style: const TextStyle(
-                    fontSize: 14, 
-                    fontWeight: FontWeight.bold
-                  ),
-                ),
-              ],
+    for (var horario in horarioProfesor) {
+      if (horario.dia.startsWith(dia.substring(0, 1)) && horario.hora == hora) {
+        asignatura = horario.asignatura;
+        aula = horario.aulas;
+        break;
+      }
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: asignatura.isNotEmpty
+            ? const Color.fromARGB(255, 151, 202, 226)
+            : Colors.white,
+        border: Border.all(color: Colors.blueAccent, width: 1),
+      ),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              asignatura.isNotEmpty
+                  ? asignatura.substring(0, 3).toUpperCase()
+                  : '',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
             ),
-          ),
-        );
-}
-
+            Text(
+              aula,
+              style: const TextStyle(fontSize: 12, color: Colors.black54),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildAsignaturasContainer() {
     return Container(
@@ -260,22 +257,9 @@ class _HorarioProfesoresDetallesScreenState
     );
   }
 
-  String _obtenerNumeroHora(String hora) {
-    switch (hora) {
-      case '8:00 - 9:00':
-        return '1';
-      case '9:00 - 10:00':
-        return '2';
-      case '10:00 - 11:00':
-        return '3';
-      case '11:30 - 12:30':
-        return '4';
-      case '12:30 - 13:30':
-        return '5';
-      case '13:30 - 14:30':
-        return '6';
-      default:
-        return '';
-    }
+  String obtenerTresPrimerasLetras(String asignatura) {
+    return asignatura.length > 3
+        ? asignatura.substring(0, 3).toUpperCase()
+        : asignatura.toUpperCase();
   }
 }

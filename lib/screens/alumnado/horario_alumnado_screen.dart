@@ -50,7 +50,7 @@ class _HorarioAlumnadoScreenState extends State<HorarioAlumnadoScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'HORARIO ALUMNOS',
+              'HORARIO',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,

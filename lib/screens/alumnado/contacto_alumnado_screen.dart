@@ -53,7 +53,7 @@ class _ContactoAlumnadoScreenState extends State<ContactoAlumnadoScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'CONTACTO ALUMNOS',
+              'CONTACTO',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
