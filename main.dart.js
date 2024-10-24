@@ -100555,7 +100555,7 @@ p=s.r
 o=new A.a5(p,new A.aG5(),A.a_(p).i("a5<1,k>")).fD(0)
 n=A.Z(o,!0,A.j(o).c)
 B.b.cC(n,new A.aG6())
-p=A.aJ(j,A.b8(a,j,t.l).w.a.b*0.9,j)
+p=A.aJ(j,A.b8(a,j,t.l).w.a.b*0.5,j)
 m=A.aZp(B.bm,2)
 l=A.a([s.amg(q)],t.nk)
 for(k=0;k<n.length;++k)l.push(s.ami(k,r,n))
