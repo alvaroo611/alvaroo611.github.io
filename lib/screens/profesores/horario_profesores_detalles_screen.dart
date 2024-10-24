@@ -95,7 +95,7 @@ Widget build(BuildContext context) {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
             children: [
-             SizedBox(height: MediaQuery.of(context).size.height * 0.06), // Espacio adaptable
+             SizedBox(height: MediaQuery.of(context).size.height * 0.02), // Espacio adaptable
               Center( // Centro el horario
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
