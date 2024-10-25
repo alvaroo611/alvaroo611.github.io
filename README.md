@@ -135,6 +135,79 @@ Una vez con todo instalado podemos arrancar el proyecto, siguiendo los siguiente
     <li>Acceder al fichero main.dart situado dentro de la carpeta lib y ejecutarlo o con f5 o seleccionando run en la esquina superior derecha</li>
 </ol>
 
+
+# Firebase para Flutter
+
+## Pasos para Configurar Firebase en tu Proyecto Flutter
+
+1. **Eliminar Archivos del Proyecto**  
+   Comienza por eliminar los archivos `firebase.json` y `firebase_options.dart` del proyecto.
+
+2. **Acceder a Firebase**  
+   Visita [Firebase](https://firebase.google.com) y haz clic en **Get Started** para crear un nuevo proyecto de Firebase. Durante este proceso, también se te pedirá crear una cuenta de Google Analytics.
+
+3. **Registrar App Web**  
+   Una vez creado el proyecto, dirígete a **Ajustes > Configuración del Proyecto** y selecciona **Registrar App Web**. Instala Firebase en tu proyecto ejecutando el siguiente comando: `npm install firebase`.
+
+4. **Configurar Autenticación**  
+   Ve al método de autenticación de tu proyecto y habilita Google como proveedor de autenticación.
+
+5. **Descargar Dependencias**  
+   Asegúrate de descargar todas las dependencias necesarias para el proyecto.
+
+6. **Modificar el ID del Cliente Web**  
+   Cambia el ID del cliente web en el archivo `firebase_service.dart`. Puedes obtener el ID del cliente web en Firebase > Autenticación.
+
+7. **Actualizar `index.html`**  
+   Dentro de la carpeta `web`, edita `index.html` y modifica la variable `firebaseConfig`. Aquí tienes un ejemplo de cómo debería verse:
+   ```javascript
+   const firebaseConfig = {
+       apiKey: "AIzaSyBOYIsXnUVAEkrbKc5CQCjrp7z3zBcHvm8",
+       authDomain: "isenecafirebase-4a37f.firebaseapp.com",
+       projectId: "isenecafirebase-4a37f",
+       storageBucket: "isenecafirebase-4a37f.appspot.com",
+       messagingSenderId: "364563782587",
+       appId: "1:301743232460:web:565e263f7d5059dff87969",
+       measurementId: "G-W4RFKY5PHM"
+   };
+8. **Iniciar Sesión en Firebase**
+Ejecuta el siguiente comando para iniciar sesión en Firebase: `firebase login`.
+
+9. **Instalar FlutterFire CLI**
+Instala FlutterFire CLI con el siguiente comando: `dart pub global activate flutterfire_cli`. Si aparece un error que indica que debes añadir una línea a las variables de entorno en el PATH, añade: C:\Users\%user%\AppData\Local\Pub\Cache\bin.
+
+10. **Instalar Firebase Tools**
+Asegúrate de instalar Firebase Tools ejecutando: `npm install -g firebase-tools`.
+
+11. **Configurar Firebase en el Proyecto**
+Ejecuta el siguiente comando para configurar Firebase: `flutterfire configure`. Cuando se te pregunte si deseas reutilizar los valores en tu archivo firebase.json, selecciona No. Si te pregunta si deseas sobrescribir el archivo FirebaseOptions existente, selecciona Sí. Elige el nuevo proyecto que creaste en Firebase.
+
+## Desplegar el Proyecto en Web
+
+
+12. **Crear un Nuevo Token**
+Crea un nuevo token con permisos para REPO y WORKFLOWS.
+
+13. **Crear un Nuevo Repositorio en GitHub**
+Crea un nuevo repositorio en GitHub y sube tu proyecto. Cambia el nombre del repositorio a (nombre_usuario_github.github.io).
+
+14. **Configuración del Repositorio**
+En la configuración del repositorio, añade el token a Secrets y Variables del proyecto, así como a los secretos del repositorio y a Environments.
+
+15. **Crear una Nueva Rama en el Repositorio**
+Ve a Configuración del Repositorio > Pages y cambia de none a Deploy from a branch. Añade la nueva rama que creaste.
+
+16. **Hacer Push del Proyecto**
+Realiza un push del proyecto. Deberías ver la página desplegada en la configuración del repositorio > Pages. Haz clic en la URL generada por GitHub.
+
+17. **Habilitar APIs en Google Cloud**
+Ve a la consola de Google Cloud y habilita Google Drive API y Google People API.
+
+18. **Configurar Credenciales en Google Cloud**
+En APIs y Servicios > Credenciales > Web Client (auto created by Google Service), añade la URL de tu página desplegada en Orígenes autorizados de JavaScript (URI 3) y la misma URL en URI de redireccionamiento autorizado.
+
+**Nota:** La configuración puede tardar entre 5 minutos y algunas horas en aplicarse.
+
 # Créditos
 
 Este proyecto ha sido diseñado por los alumnos de 2 DAM supervisado por el profesor Rafael Delgado Cubillas y Francisco Benitez Chico
