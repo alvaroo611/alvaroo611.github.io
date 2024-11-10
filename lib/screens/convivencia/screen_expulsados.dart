@@ -18,7 +18,13 @@ class _ExpulsadosScreenState extends State<ExpulsadosScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Expulsados'),
+        title: const Text(
+          "EXPULSADOS",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.blue,
       ),
       body: Consumer<ConvivenciaProvider>(
@@ -29,15 +35,19 @@ class _ExpulsadosScreenState extends State<ExpulsadosScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          List<Expulsado> listadoExpulsadosHoy = listadoExpulsados;
+          // Filtrar la lista para omitir los objetos cuyo `idAlumno` esté vacío
+          List<Expulsado> listadoExpulsadosFiltrados = listadoExpulsados.where((expulsado) {
+            return expulsado.idAlumno.trim().isNotEmpty;
+          }).toList();
 
+          // Filtrar por la fecha seleccionada, si existe
           if (selectedDate != null) {
-            listadoExpulsadosHoy = listadoExpulsadosHoy.where((expulsado) {
+            listadoExpulsadosFiltrados = listadoExpulsadosFiltrados.where((expulsado) {
               DateTime fecInic = _parseDate(expulsado.fecInic);
               DateTime fecFin = _parseDate(expulsado.fecFin);
-              return selectedDate!.isAtSameMomentAs(fecInic) ||
-                  selectedDate!.isAtSameMomentAs(fecFin) ||
-                  (selectedDate!.isAfter(fecInic) && selectedDate!.isBefore(fecFin));
+              // Comparar las fechas, incluyendo las fechas límite
+              return (selectedDate!.isAtSameMomentAs(fecInic) || selectedDate!.isAfter(fecInic)) &&
+                    (selectedDate!.isAtSameMomentAs(fecFin) || selectedDate!.isBefore(fecFin));
             }).toList();
           }
 
@@ -60,11 +70,10 @@ class _ExpulsadosScreenState extends State<ExpulsadosScreen> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: listadoExpulsadosHoy.length,
+                  itemCount: listadoExpulsadosFiltrados.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final expulsado = listadoExpulsadosHoy[index];
+                    final expulsado = listadoExpulsadosFiltrados[index];
 
-                    // Crear una lista de widgets para los campos que tienen valor
                     List<Widget> subtitleWidgets = [];
 
                     if (expulsado.curso.isNotEmpty) {
@@ -73,7 +82,7 @@ class _ExpulsadosScreenState extends State<ExpulsadosScreen> {
                     if (expulsado.tipoExpulsion.isNotEmpty) {
                       subtitleWidgets.add(Text('Tipo Expulsión: ${expulsado.tipoExpulsion}'));
                     }
-                    if (expulsado.observaciones != null && expulsado.observaciones != "N/A" && expulsado.observaciones!.isNotEmpty) {
+                    if (expulsado.observaciones != null && expulsado.observaciones!.isNotEmpty) {
                       subtitleWidgets.add(Text('Observaciones: ${expulsado.observaciones}'));
                     }
 
@@ -99,9 +108,9 @@ class _ExpulsadosScreenState extends State<ExpulsadosScreen> {
                                 if (!expulsado.expulsionEntregada)
                                   const Text('Expulsión Entregada: No'),
                                 if (expulsado.expulsionFirmada)
-                                  const Text('Expulsión Firmada: Sí'),
+                                  const Text(' Expulsión Firmada: Sí'),
                                 if (!expulsado.expulsionFirmada)
-                                  const Text('Expulsión Firmada: No'),
+                                  const Text(' Expulsión Firmada: No'),
                               ],
                             ),
                             ...subtitleWidgets,
@@ -128,12 +137,7 @@ class _ExpulsadosScreenState extends State<ExpulsadosScreen> {
     );
   }
 
-  // Función para convertir las fechas con guion o barra en un formato DateTime estándar
-  DateTime _parseDate(String date) {
-    String formattedDate = date.replaceAll('/', '-');  
-    return DateTime.parse(formattedDate); 
-  }
-
+  // Método para seleccionar la fecha
   Future<void> _selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
     final DateTime initialDate = selectedDate ?? now;
@@ -150,4 +154,25 @@ class _ExpulsadosScreenState extends State<ExpulsadosScreen> {
       });
     }
   }
+
+  // Método para parsear las fechas con diferentes formatos
+  DateTime _parseDate(String date) {
+  String formattedDate = date.replaceAll('/', '-');
+
+  List<String> dateParts = formattedDate.split('-');
+  if (dateParts.length == 3) {
+    // Verificar si el año tiene solo dos dígitos y agregar "20" al principio
+    if (dateParts[2].length == 2) {
+      dateParts[2] = '20${dateParts[2]}'; 
+    }
+
+    formattedDate = dateParts.join('-');
+      DateFormat format = DateFormat('dd-MM-yyyy');
+      return format.parseStrict(formattedDate); 
+  }
+    throw FormatException("Formato de fecha no válido: $date");
+  }
+
 }
+
+

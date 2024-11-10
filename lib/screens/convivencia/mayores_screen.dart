@@ -61,7 +61,13 @@ class _MayoresScreenState extends State<MayoresScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mayores'),
+        title: const Text(
+          "MAYORES",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.blue,
       ),
       body: Column(

@@ -45,7 +45,6 @@ class Expulsado {
   factory Expulsado.fromJson(String str) => Expulsado.fromMap(json.decode(str));
 
   factory Expulsado.fromMap(Map<String, dynamic> json) {
-    print(json);
     return Expulsado(
       idAlumno: json["ALUMNO"] ?? "",  // Verifica que las claves coincidan
       curso: json["CURSO"] ?? "",
@@ -56,12 +55,7 @@ class Expulsado {
       tipoExpulsion: json["TIPO\nEXPULSIÓN"] ?? "",
       expulsionEntregada: json["EXPULSIÓN ENTREGADA"] == "TRUE",
       expulsionFirmada: json["EXPULSIÓN FIRMADA"] == "TRUE",
-      observaciones: json["OBSERVACIONES"] ?? "N/A",
+      observaciones: json["OBSERVACIONES"],
     );
-  }
-
-  @override
-  String toString() {
-    return 'Alumno: $idAlumno, Curso: $curso, Fecha Inicio: $fecInic, Fecha Fin: $fecFin, Fecha Vuelta: $fecVuelta, Tipo Expulsión: $tipoExpulsion, Expulsión Entregada: $expulsionEntregada, Expulsión Firmada: $expulsionFirmada, Observaciones: ${observaciones ?? "N/A"}';
   }
 }
