@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iseneca/firebase_options.dart';
 import 'package:iseneca/providers/alumno_provider.dart';
-import 'package:iseneca/providers/expulsados_provider.dart';
 import 'package:iseneca/providers/providers.dart';
 
 import 'package:iseneca/screens/convivencia/incidencia_telefono_screen.dart';
@@ -78,10 +77,6 @@ class AppState extends StatelessWidget {
           create: (_) => DaceProvider(),
           lazy: false,
         ),
-        ChangeNotifierProvider(
-          create: (_) => ExpulsadosProvider(),
-          lazy: false,
-        )
       ],
       child: const MyApp(),
     );
@@ -99,13 +94,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
       routes: {
-        "/": (BuildContext context) => LoginScreen(),
+        "/": (BuildContext context) => const LoginScreen(),
         "home_screen": (BuildContext context) => const HomeScreen(),
         "main_screen": (BuildContext context) => const MainScreen(),
         "convivencia_screen": (BuildContext context) =>
             const ConvivenciaScreen(),
         "expulsados_screen": (BuildContext context) => const ExpulsadosScreen(),
-        "screen_expulsados": (BuildContext context) => const ScreenExpulsados(),
         "mayores_screen": (BuildContext context) => const MayoresScreen(),
         "dace_screen": (BuildContext context) => const DaceScreen(),
         "personal_screen": (BuildContext context) => const PersonalScreen(),

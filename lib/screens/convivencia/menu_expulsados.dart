@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/models/expulsados_response.dart';
-import 'package:iseneca/providers/expulsados_provider.dart';
-import 'package:iseneca/utils/human_formats.dart';
+import 'package:iseneca/providers/convivencia_provider.dart';
 import 'package:provider/provider.dart';
 
 class MenuExpulsados extends StatelessWidget {
@@ -9,8 +8,9 @@ class MenuExpulsados extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final expulsadosProvider = Provider.of<ExpulsadosProvider>(context);
-    List<Expulsado> expulsados = [];
+    final convivenciaProvider = Provider.of<ConvivenciaProvider>(context);
+    final List<Expulsado> expulsados = convivenciaProvider.listaExpulsados;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expulsados'),
@@ -21,47 +21,26 @@ class MenuExpulsados extends StatelessWidget {
           },
         ),
       ),
-      body: FutureBuilder(
-        future: expulsadosProvider.getExpulsados(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            expulsados = snapshot.data;
-            return Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () => expulsadosProvider.selectDate(context),
-                  child: Text(HumanFormats.formatDate(
-                    expulsadosProvider.selectedDate.toLocal())),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: expulsados.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          
-                        },
-                        child: ListTile(
-                          title: Text(expulsados[index].apellidosNombre),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(expulsados[index].fecInic),
-                              const Text(" - "),
-                              Text(expulsados[index].fecFin),
-                            ],
-                          ),
-                          subtitle: Text(expulsados[index].curso),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: ListView.builder(
+        itemCount: expulsados.length,
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              // Acciones cuando se toca un elemento
+            },
+            child: ListTile(
+              title: Text(expulsados[index].idAlumno),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(expulsados[index].fecInic),
+                  const Text(" - "),
+                  Text(expulsados[index].fecFin),
+                ],
+              ),
+              subtitle: Text(expulsados[index].curso),
+            ),
+          );
         },
       ),
     );
