@@ -140,6 +140,8 @@ Una vez con todo instalado podemos arrancar el proyecto, siguiendo los siguiente
 
 ## Pasos para Configurar Firebase en tu Proyecto Flutter
 
+0. **Clonar repositorio de github**
+
 1. **Eliminar Archivos del Proyecto**  
    Comienza por eliminar los archivos `firebase.json` y `firebase_options.dart` del proyecto.
 
@@ -159,7 +161,7 @@ Una vez con todo instalado podemos arrancar el proyecto, siguiendo los siguiente
    Cambia el ID del cliente web en el archivo `firebase_service.dart`. Puedes obtener el ID del cliente web en Firebase > Autenticación.
 
 7. **Actualizar `index.html`**  
-   Dentro de la carpeta `web`, edita `index.html` y modifica la variable `firebaseConfig`. Aquí tienes un ejemplo de cómo debería verse:
+   Dentro de la carpeta `web`, edita `index.html` y modifica la variable `firebaseConfig`. Aquí tienes un ejemplo de cómo debería verse(Coge la configuracion que obtienes en el apartado de app web en firebase):
    ```javascript
    const firebaseConfig = {
        apiKey: "AIzaSyBOYIsXnUVAEkrbKc5CQCjrp7z3zBcHvm8",
