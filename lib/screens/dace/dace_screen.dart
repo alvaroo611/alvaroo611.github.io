@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:iseneca/providers/providers.dart';
-//import 'package:url_launcher/url_launcher.Dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class DaceScreen extends StatefulWidget {
   const DaceScreen({Key? key}) : super(key: key);
@@ -16,16 +14,24 @@ class _DaceScreenState extends State<DaceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Actividades Extraescolares"),
+      appBar: AppBar(
+        title: const Text(
+          "Actividades Extraescolares",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
-        body: _lista());
+        backgroundColor: Colors.blue,
+      ),
+      body: _lista(),
+    );
   }
 
   Widget _lista() {
     final resultadosDace = Provider.of<DaceProvider>(context);
 
-    //Ordenar fecha de menor a mayor
+    // Ordenar fecha de menor a mayor
     resultadosDace.resultados.sort((a, b) => DateFormat('d/M/yyyy')
         .parse(a.fechaInicio)
         .compareTo(DateFormat('d/M/yyyy').parse(b.fechaInicio)));
@@ -33,37 +39,55 @@ class _DaceScreenState extends State<DaceScreen> {
     return ListView.builder(
       itemCount: resultadosDace.resultados.length,
       itemBuilder: (BuildContext context, int index) {
-        //Solo muestra las actividades con fecha de inicio posterior a la fecha de hoy
-        // if(DateFormat('d/M/yyyy').parse(resultadosDace.resultados[index].fechaInicio).isAfter(DateTime.now())){
-        return Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-                _launchUrlStringURL(resultadosDace.resultados[index]
-                    .alumnos); //Enlace a documento con listado de alumnos
-              },
-              child: ListTile(
-                leading: const Icon(Icons.add, color: Colors.blue),
-                title: Text(resultadosDace.resultados[index].actividad),
-                trailing: Text(resultadosDace.resultados[index].fechaInicio),
-              ),
+        final actividad = resultadosDace.resultados[index];
+
+        return Card(
+          elevation: 3,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: ListTile(
+            onTap: () {
+              _mostrarAlumnosPopup(actividad.alumnos);
+            },
+            title: Text(
+              actividad.actividad,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
-            const Divider()
-          ],
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (actividad.fechaInicio.isNotEmpty)
+                  Text('Fecha de Inicio: ${actividad.fechaInicio}'),
+                if (actividad.fechaFin.isNotEmpty)
+                  Text('Fecha de Fin: ${actividad.fechaFin}'),
+              ]
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios, color: Colors.blue),
+          ),
         );
-        // }
-        // else{
-        //   return Container();
-        // }
       },
     );
   }
 
-  _launchUrlStringURL(String url) async {
-    if (await canLaunchUrlString(url)) {
-      await launchUrlString(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  void _mostrarAlumnosPopup(String alumnos) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Alumnos'),
+          content: Text(alumnos),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cerrar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
