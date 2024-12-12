@@ -188,7 +188,7 @@ Ejecuta el siguiente comando para configurar Firebase: `flutterfire configure`. 
 
 
 12. **Crear un Nuevo Token**
-Crea un nuevo token con permisos para REPO y WORKFLOWS.
+Crea un nuevo token accediendo a tu cuenta de GitHub y seleccionando "Settings" desde tu foto de perfil, despues seleccionamos en el menu vertical izquierdo el apartado Developer setting>Personal acces token>Token (classic) y pulsamos sobre generar nuevo token(classic) ,le daremos permisos para REPO y WORKFLOWS .
 
 13. **Crear un Nuevo Repositorio en GitHub**
 Crea un nuevo repositorio en GitHub y sube tu proyecto. Cambia el nombre del repositorio a (nombre_usuario_github.github.io).

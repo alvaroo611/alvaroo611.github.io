@@ -19,24 +19,23 @@ class _HorarioProfesoresDetallesScreenState
   List<HorarioResult> horarioProfesor = [];
   Set<String> asignaturasProfesor = {};
 
- @override
-void initState() {
-  super.initState();
-  final credenciales = ModalRoute.of(context)!.settings.arguments as Credenciales;
-  profesor = credenciales;
+  @override
+  void initState() {
+    super.initState();
+    final credenciales =
+        ModalRoute.of(context)!.settings.arguments as Credenciales;
+    profesor = credenciales;
 
-  // Obtén el proveedor del centro fuera de _fetchHorario para evitar duplicaciones
-  centroProvider = Provider.of<CentroProvider>(context, listen: false);
+    // Obtén el proveedor del centro fuera de _fetchHorario para evitar duplicaciones
+    centroProvider = Provider.of<CentroProvider>(context, listen: false);
 
-  // Inicializa el Future con la función asincrónica
-  _horarioFuture = _fetchHorario(centroProvider, profesor);
+    // Inicializa el Future con la función asincrónica
+    _horarioFuture = _fetchHorario(centroProvider, profesor);
 
-  // Verifica los datos recibidos
-  print("Credenciales: $profesor");
-  print("Centro: $centroProvider");
-  print("Horario: $_horarioFuture");
-}
-
+    // Verifica los datos recibidos
+    print("Credenciales: $profesor");
+    print("Centro: $centroProvider");
+  }
 
   Future<void> _fetchHorario(
     CentroProvider horarioProvider,
@@ -44,11 +43,21 @@ void initState() {
   ) async {
     await horarioProvider.getHorario();
     final horarios = horarioProvider.listaHorariosProfesores.result;
+
     setState(() {
       horarioProfesor = obtenerHorarioDelProfesor(
           profesor.nombre, profesor.apellidos, horarios);
       asignaturasProfesor = _obtenerAsignaturasUnicas(horarioProfesor);
     });
+    if (horarioProfesor.isEmpty) {
+      // No hay horario disponible para este profesor
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No hay horario disponible para este profesor.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   List<HorarioResult> obtenerHorarioDelProfesor(
