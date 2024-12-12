@@ -19,8 +19,7 @@ class ConvivenciaProvider extends ChangeNotifier {
   }
 
   getExpulsados() async {
-    const url =
-        GoogleSheets.expulsados;
+    const url = GoogleSheets.expulsados;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final expulsadoResponse = ExpulsadosResponse.fromJson(jsonData);
@@ -30,8 +29,7 @@ class ConvivenciaProvider extends ChangeNotifier {
   }
 
   getMayores() async {
-    const url =
-        GoogleSheets.mayores;
+    const url = GoogleSheets.mayores;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final mayorResponse = MayoresResponse.fromJson(jsonData);
