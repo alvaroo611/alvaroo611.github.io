@@ -85,10 +85,11 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                         barrierDismissible: false,
                         transitionDuration: const Duration(milliseconds: 300),
                         pageBuilder: (context, animation, secondaryAnimation) {
-                          return dialogoBotones(
-                            servicioProvider,
-                            controllerTextoNombreAlumno,
-                            listadoAlumnos[index],
+                          return DialogoBotones(
+                            servicio: servicioProvider,
+                            controllerTextoNombreAlumno:
+                                controllerTextoNombreAlumno,
+                            student: listadoAlumnos[index],
                           );
                         },
                       );
@@ -145,15 +146,33 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
             ),
     );
   }
+}
 
-  Widget dialogoBotones(
-    ServicioProvider servicio,
-    TextEditingController controllerTextoNombreAlumno,
-    Student student,
-  ) {
-    String horaEntrada = '';
-    String fechaEntrada = '';
+class DialogoBotones extends StatefulWidget {
+  final ServicioProvider servicio;
+  final TextEditingController controllerTextoNombreAlumno;
+  final Student student;
+
+  DialogoBotones({
+    required this.servicio,
+    required this.controllerTextoNombreAlumno,
+    required this.student,
+  });
+
+  @override
+  _DialogoBotonesState createState() => _DialogoBotonesState();
+}
+
+class _DialogoBotonesState extends State<DialogoBotones> {
+  bool isIdaPressed = false;
+  bool isVueltaPressed = false;
+  String horaEntrada = '';
+  String fechaEntrada = '';
+
+  @override
+  Widget build(BuildContext context) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.8;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -174,7 +193,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
               TextField(
-                controller: controllerTextoNombreAlumno,
+                controller: widget.controllerTextoNombreAlumno,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -192,8 +211,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.8),
+                      constraints: BoxConstraints(maxWidth: maxWidth),
                       child: RawMaterialButton(
                         onPressed: () {
                           if (!isIdaPressed) {
@@ -228,8 +246,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                       height: MediaQuery.of(context).size.height * 0.05,
                     ),
                     Container(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.8),
+                      constraints: BoxConstraints(maxWidth: maxWidth),
                       child: RawMaterialButton(
                         onPressed: () async {
                           if (!isVueltaPressed) {
@@ -242,8 +259,9 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                             String horaSalida =
                                 DateFormat('HH:mm:ss').format(now);
 
-                            await servicioProvider.sendData(
-                              controllerTextoNombreAlumno.text.toString(),
+                            await widget.servicio.sendData(
+                              widget.controllerTextoNombreAlumno.text
+                                  .toString(),
                               fechaEntrada,
                               horaEntrada,
                               fechaSalida,
@@ -255,7 +273,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        fillColor: isIdaPressed ? Colors.grey : Colors.red,
+                        fillColor: isVueltaPressed ? Colors.grey : Colors.red,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 120, vertical: 60),
                         child: const FittedBox(

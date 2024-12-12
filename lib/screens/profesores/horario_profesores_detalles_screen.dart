@@ -19,15 +19,24 @@ class _HorarioProfesoresDetallesScreenState
   List<HorarioResult> horarioProfesor = [];
   Set<String> asignaturasProfesor = {};
 
-  @override
-  void initState() {
-    super.initState();
-    final credenciales =
-        ModalRoute.of(context)!.settings.arguments as Credenciales;
-    profesor = credenciales;
-    centroProvider = Provider.of<CentroProvider>(context, listen: false);
-    _horarioFuture = _fetchHorario(centroProvider, profesor);
-  }
+ @override
+void initState() {
+  super.initState();
+  final credenciales = ModalRoute.of(context)!.settings.arguments as Credenciales;
+  profesor = credenciales;
+
+  // Obtén el proveedor del centro fuera de _fetchHorario para evitar duplicaciones
+  centroProvider = Provider.of<CentroProvider>(context, listen: false);
+
+  // Inicializa el Future con la función asincrónica
+  _horarioFuture = _fetchHorario(centroProvider, profesor);
+
+  // Verifica los datos recibidos
+  print("Credenciales: $profesor");
+  print("Centro: $centroProvider");
+  print("Horario: $_horarioFuture");
+}
+
 
   Future<void> _fetchHorario(
     CentroProvider horarioProvider,
@@ -36,8 +45,8 @@ class _HorarioProfesoresDetallesScreenState
     await horarioProvider.getHorario();
     final horarios = horarioProvider.listaHorariosProfesores.result;
     setState(() {
-      horarioProfesor =
-          obtenerHorarioDelProfesor(profesor.nombre, profesor.apellidos, horarios);
+      horarioProfesor = obtenerHorarioDelProfesor(
+          profesor.nombre, profesor.apellidos, horarios);
       asignaturasProfesor = _obtenerAsignaturasUnicas(horarioProfesor);
     });
   }
@@ -56,72 +65,77 @@ class _HorarioProfesoresDetallesScreenState
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: Text(
-        "Horario de ${profesor.nombre} ${profesor.apellidos}",
-        style: const TextStyle(color: Colors.white),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Horario de ${profesor.nombre} ${profesor.apellidos}",
+          style: const TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
-      centerTitle: true,
-      backgroundColor: Colors.blue,
-    ),
-    body: FutureBuilder<void>(
-      future: _horarioFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
+      body: FutureBuilder<void>(
+        future: _horarioFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
 
-        List<String> diasOrdenados = ["L", "M", "X", "J", "V"];
-        List<String> diasNombres = [
-          "Lunes",
-          "Martes",
-          "Miércoles",
-          "Jueves",
-          "Viernes"
-        ];
+          List<String> diasOrdenados = ["L", "M", "X", "J", "V"];
+          List<String> diasNombres = [
+            "Lunes",
+            "Martes",
+            "Miércoles",
+            "Jueves",
+            "Viernes"
+          ];
 
-        Set<String> horasUnicas =
-            horarioProfesor.map((horario) => horario.hora).toSet();
-        List<String> horasOrdenadas = horasUnicas.toList()
-          ..sort((a, b) =>
-              int.parse(a.split(":")[0]).compareTo(int.parse(b.split(":")[0])));
+          Set<String> horasUnicas =
+              horarioProfesor.map((horario) => horario.hora).toSet();
+          List<String> horasOrdenadas = horasUnicas.toList()
+            ..sort((a, b) => int.parse(a.split(":")[0])
+                .compareTo(int.parse(b.split(":")[0])));
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
-            children: [
-             SizedBox(height: MediaQuery.of(context).size.height * 0.02), // Espacio adaptable
-              Center( // Centro el horario
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Table(
-                    border: TableBorder.all(color: Colors.blueAccent, width: 2),
-                    defaultColumnWidth: const FixedColumnWidth(100.0),
-                    children: [
-                      _buildDiasSemana(diasNombres),
-                      for (int i = 0; i < horasOrdenadas.length; i++)
-                        _buildHorarioRow(i, diasOrdenados, horasOrdenadas),
-                    ],
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Centrar verticalmente
+              children: [
+                SizedBox(
+                    height: MediaQuery.of(context).size.height *
+                        0.02), // Espacio adaptable
+                Center(
+                  // Centro el horario
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Table(
+                      border:
+                          TableBorder.all(color: Colors.blueAccent, width: 2),
+                      defaultColumnWidth: const FixedColumnWidth(100.0),
+                      children: [
+                        _buildDiasSemana(diasNombres),
+                        for (int i = 0; i < horasOrdenadas.length; i++)
+                          _buildHorarioRow(i, diasOrdenados, horasOrdenadas),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Center( // Centro el contenedor de asignaturas
-                child: _buildAsignaturasContainer(),
-              ),
-            ],
-          ),
-        );
-      },
-    ),
-  );
-}
-
+                const SizedBox(height: 20),
+                Center(
+                  // Centro el contenedor de asignaturas
+                  child: _buildAsignaturasContainer(),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   TableRow _buildDiasSemana(List<String> diasNombres) {
     return TableRow(
@@ -132,14 +146,15 @@ Widget build(BuildContext context) {
     );
   }
 
-  TableRow _buildHorarioRow(int horaDia, List<String> diasOrdenados, List<String> horasOrdenadas) {
+  TableRow _buildHorarioRow(
+      int horaDia, List<String> diasOrdenados, List<String> horasOrdenadas) {
     String horaInicio = horasOrdenadas[horaDia];
     String horaFinal = _calcularHoraFinal(horaInicio);
 
     return TableRow(
       children: [
         _buildTableCell('$horaInicio - $horaFinal', isHeader: true),
-        for (var dia in diasOrdenados) 
+        for (var dia in diasOrdenados)
           _buildHorarioCell(dia, horasOrdenadas[horaDia]),
       ],
     );
@@ -159,7 +174,8 @@ Widget build(BuildContext context) {
       child: Center(
         child: Text(
           text,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
