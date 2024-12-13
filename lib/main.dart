@@ -13,7 +13,6 @@ import 'package:iseneca/screens/screens.dart';
 import 'package:iseneca/service/services.dart';
 import 'package:provider/provider.dart';
 
-
 //Main
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +47,6 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-       
         ChangeNotifierProvider(
           create: (_) => CredencialesProvider(),
           lazy: false,
