@@ -20,6 +20,18 @@ jobs:
 
     - name: Enable Flutter Web
       run: flutter config --enable-web
+    
+    - name: Cache Flutter dependencies
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.pub-cache
+          .dart_tool
+        key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-flutter-
+
+
 
     - name: Install dependencies
       run: flutter packages get
