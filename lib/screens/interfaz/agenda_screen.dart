@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/widgets/lista_opciones.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart' as CalendarClass;
 
 class AgendaScreen extends StatelessWidget {
   const AgendaScreen({Key? key}) : super(key: key);

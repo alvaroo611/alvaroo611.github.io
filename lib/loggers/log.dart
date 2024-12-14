@@ -13,7 +13,6 @@ class LogService {
 
   static void logError(String message,
       [dynamic error, StackTrace? stackTrace]) {
-    _logger.e(message, error, stackTrace);
     _sendToServer("ERROR", message, error, stackTrace);
   }
 
