@@ -31,8 +31,8 @@ class AgendaScreen extends StatelessWidget {
                   ),
                   Expanded(
                     flex: 8,
-                    child: SfCalendar(
-                      view: CalendarView.month,
+                    child: CalendarClass.SfCalendar(
+                      view: CalendarClass.CalendarView.month,
                     ),
                   ),
                 ],
