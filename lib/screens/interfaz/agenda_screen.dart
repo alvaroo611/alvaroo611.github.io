@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/widgets/lista_opciones.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart' as CalendarClass;
+
 
 class AgendaScreen extends StatelessWidget {
   const AgendaScreen({Key? key}) : super(key: key);
@@ -27,12 +27,6 @@ class AgendaScreen extends StatelessWidget {
                               fontSize: 60,
                               color: Colors.white,
                               fontFamily: 'ErasDemi')),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 8,
-                    child: CalendarClass.SfCalendar(
-                      view: CalendarClass.CalendarView.month,
                     ),
                   ),
                 ],
