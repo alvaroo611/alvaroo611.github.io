@@ -22,13 +22,15 @@ class ItemTable extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, "convivencia_screen"),
-            child: const SingleCard(icon: "assets/covid.png", text: "Convivencia"),
+            child: const SingleCard(
+                icon: "assets/convivencia.png", text: "Convivencia"),
           ),
         ]),
         TableRow(children: [
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, "dace_screen"),
-            child: const SingleCard(icon: "assets/campana.png", text: "DACE"),
+            child: const SingleCard(
+                icon: "assets/extraescolares.png", text: "DACE"),
           ),
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, "servicio_screen"),
