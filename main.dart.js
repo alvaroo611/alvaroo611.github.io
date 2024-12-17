@@ -96940,7 +96940,7 @@ G(a){var s=null
 return A.aR(A.b([A.c_(A.au(s,s,B.k,B.kf,s,s,s,s,s,s,s,s,s),2),A.c_(A.au(s,s,B.k,B.e,s,s,s,s,s,s,s,s,s),8)],t.p),B.l,B.n,B.m)}}
 A.OV.prototype={
 G(a){var s=null,r=t.p
-return A.aKf(s,A.b([new A.fR(A.b([A.bV(s,B.TS,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.acN(a),s,s,s,s,s,s),A.bV(s,B.TP,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.acO(a),s,s,s,s,s,s),A.bV(s,B.TQ,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.acP(a),s,s,s,s,s,s)],r)),new A.fR(A.b([A.bV(s,B.TR,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.acQ(a),s,s,s,s,s,s),A.bV(s,B.TO,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.acR(a),s,s,s,s,s,s),A.au(s,s,B.k,s,s,s,s,s,s,s,s,s,s)],r))],t.nk),B.Ek)}}
+return A.aKf(s,A.b([new A.fR(A.b([A.bV(s,B.TR,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.acN(a),s,s,s,s,s,s),A.bV(s,B.TP,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.acO(a),s,s,s,s,s,s),A.bV(s,B.TS,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.acP(a),s,s,s,s,s,s)],r)),new A.fR(A.b([A.bV(s,B.TQ,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.acQ(a),s,s,s,s,s,s),A.bV(s,B.TO,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.acR(a),s,s,s,s,s,s),A.au(s,s,B.k,s,s,s,s,s,s,s,s,s,s)],r))],t.nk),B.Ek)}}
 A.acN.prototype={
 $0(){return A.bl(this.a,!1).dQ("alumnado_screen",null,t.X)},
 $S:0}
@@ -104615,9 +104615,9 @@ B.TM=new A.ak(B.fw,!1,!1,!1,!0,B.v)
 B.TN=new A.ak(B.dH,!0,!1,!1,!1,B.bu)
 B.TO=new A.p0("assets/banio.png","Ba\xf1o",null)
 B.TP=new A.p0("assets/profesor.png","Personal del centro",null)
-B.TQ=new A.p0("assets/covid.png","Convivencia",null)
-B.TR=new A.p0("assets/campana.png","DACE",null)
-B.TS=new A.p0("assets/sombrero.png","Alumnado del centro",null)
+B.TQ=new A.p0("assets/extraescolares.png","DACE",null)
+B.TR=new A.p0("assets/sombrero.png","Alumnado del centro",null)
+B.TS=new A.p0("assets/convivencia.png","Convivencia",null)
 B.TT=new A.J(1e5,1e5)
 B.B9=new A.J(10,10)
 B.TV=new A.J(14,14)
