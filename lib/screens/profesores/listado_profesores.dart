@@ -22,6 +22,10 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
   late HorarioResponse horarioResponse = HorarioResponse(result: []);
   late HorarioResult profesorActual;
 
+  /// Inicializa el estado del widget y realiza las peticiones iniciales de datos
+  ///
+  /// Este método se ejecuta cuando se crea el widget y se encarga de obtener las credenciales de los usuarios
+  /// y los horarios de los profesores, llamando a los proveedores correspondientes
   @override
   void initState() {
     super.initState();
@@ -34,6 +38,13 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
     });
   }
 
+  /// Realiza una solicitud para obtener el horario de los profesores
+  ///
+  /// Este método consulta la API para obtener los horarios de los profesores y luego actualiza el estado
+  /// del widget con la respuesta obtenida
+  ///
+  /// Parámetros:
+  /// - [horarioProvider]: Proveedor que maneja la obtención de horarios
   Future<void> _fetchHorario(CentroProvider horarioProvider) async {
     await horarioProvider.getHorario();
     setState(() {
@@ -41,6 +52,13 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
     });
   }
 
+  /// Realiza una solicitud para obtener las credenciales de los profesores
+  ///
+  /// Este método consulta la API para obtener las credenciales de los profesores, ordena la lista
+  /// de profesores por nombre y actualiza el estado del widget con los datos obtenidos
+  ///
+  /// Parámetros:
+  /// - [credencialesProvider]: Proveedor que maneja la obtención de credenciales
   Future<void> _fetchProfesores(
       CredencialesProvider credencialesProvider) async {
     setState(() {
@@ -70,6 +88,10 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
     }
   }
 
+  /// Filtra los resultados de los profesores según el término de búsqueda
+  ///
+  /// Parámetros:
+  /// - [query]: El texto que el usuario ingresa para filtrar la lista de profesores
   void filterSearchResults(String query) {
     setState(() {
       if (query.isEmpty) {
@@ -84,6 +106,12 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
     });
   }
 
+  /// Obtiene el día actual de la semana y la hora del dia de clase
+  ///
+  /// Este método devuelve una cadena que representa el día de la semana la hora del dia de clase, como "L1" (lunes, 1ª hora del dia)
+  ///
+  /// Parámetros:
+  /// - [now]: Fecha y hora actual
   String _obtenerDiaActual(DateTime now) {
     List<String> dias = ["L", "M", "X", "J", "V", "S", "D"];
     String diaSemana = dias[
@@ -120,6 +148,9 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
     return diaSemana + parteDelDia;
   }
 
+  /// Obtiene la hora actual en formato "HH:mm"
+  ///
+  /// Este método devuelve la hora actual formateada
   String _obtenerHoraActual() {
     DateTime now = DateTime.now();
     String hora = now.hour
@@ -131,6 +162,12 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
     return '$hora:$minutos';
   }
 
+  /// Muestra un diálogo con la localización actual del profesor
+  ///
+  /// Parámetros:
+  /// - [context]: El contexto en el que se debe mostrar el cuadro de diálogo
+  /// - [nombreProfesor]: El nombre del profesor a mostrar
+  /// - [apellidoProfesor]: El apellido del profesor a mostrar
   void _mostrarLocalizacion(
       BuildContext context, String nombreProfesor, String apellidoProfesor) {
     DateTime now = DateTime.now();
@@ -311,6 +348,13 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
     }
   }
 
+  /// Método que construye la interfaz de usuario para la pantalla
+  ///
+  /// Parámetros:
+  /// - [context]: El contexto en el que se construye el widget
+  ///
+  /// Retorna:
+  /// - Un [Scaffold] que contiene la estructura de la pantalla
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

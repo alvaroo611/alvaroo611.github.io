@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/widgets/widgets.dart';
 
+/// Un widget que representa una tabla de elementos interactivos, donde cada elemento 
+/// permite navegar a diferentes pantallas de la aplicación
 class ItemTable extends StatelessWidget {
   const ItemTable({
     Key? key,
   }) : super(key: key);
 
+  /// Construye el widget Table que contiene las filas y columnas de elementos
+  ///
+  /// Parámetros:
+  /// - [context]: El contexto de construcción, necesario para acceder a la navegación
+  ///
+  /// Retorna:
+  /// - Un widget Table con dos filas, cada una conteniendo diferentes SingleCard interactivos
   @override
   Widget build(BuildContext context) {
     return Table(

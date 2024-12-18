@@ -4,6 +4,10 @@ import 'package:iseneca/service/services.dart';
 
 Size size = Size.zero;
 
+/// Representa una tarjeta de usuario con información y opciones
+///
+/// Esta tarjeta incluye el nombre del usuario, un mensaje del centro educativo,
+/// y una línea de botones para acciones adicionales
 class UserCard extends StatelessWidget {
   const UserCard({
     Key? key,

@@ -17,6 +17,13 @@ class _MayoresScreenState extends State<MayoresScreen> {
   TextEditingController _controller = TextEditingController();
   List<Mayor> filteredMayores = [];
 
+  /// Construye la interfaz de la pantalla que muestra la lista de mayores.
+  ///
+  /// Parámetros:
+  /// - [context]: El contexto de la pantalla actual donde se construye el widget
+  ///
+  /// Retorna:
+  /// - Un widget Scaffold que contiene la estructura visual de la pantalla de mayores
   @override
   Widget build(BuildContext context) {
     final mayoresProvider = Provider.of<ConvivenciaProvider>(context);
@@ -188,6 +195,10 @@ class _MayoresScreenState extends State<MayoresScreen> {
     );
   }
 
+  /// Muestra una pantalla para seleccionar una fecha
+  ///
+  /// Muestra un selector de fechas donde el usuario puede elegir una fecha
+  /// para filtrar la lista de mayores
   Future<void> _selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
     final DateTime initialDate = selectedDate ?? now;
@@ -205,6 +216,11 @@ class _MayoresScreenState extends State<MayoresScreen> {
     }
   }
 
+  /// Filtra los resultados de la lista de mayores según una consulta
+  /// 
+  /// Parámetros:
+  /// - [query]: Texto que se utilizará para filtrar la lista
+  /// - [listadoMayoresHoy]: Lista de mayores sobre la que se realizará el filtrado
   void filterSearchResults(String query, List<Mayor> listadoMayoresHoy) {
     setState(() {
       if (query.isEmpty) {
@@ -219,6 +235,13 @@ class _MayoresScreenState extends State<MayoresScreen> {
     });
   }
 
+  /// Muestra un cuadro de diálogo con la información detallada de un mayor.
+  ///
+  /// Parámetros:
+  /// - [context]: El contexto actual de la pantalla donde se debe mostrar el cuadro de diálogo
+  /// - [index]: El índice del mayor dentro de la lista displayList para obtener los datos correspondientes
+  /// - [cogerDatosMayores]: Lista de datos de los alumnos relacionados con los mayores
+  /// - [displayList]: Lista de mayores que se está mostrando en la interfaz
   void _mostrarAlert(BuildContext context, int index,
       List<DatosAlumnos> cogerDatosMayores, List<Mayor> displayList) {
     showDialog(

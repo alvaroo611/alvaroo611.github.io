@@ -17,6 +17,10 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
   bool isLoading = false;
   TextEditingController _controller = TextEditingController();
 
+  /// Método de inicialización
+  ///
+  /// Este método se ejecuta cuando la pantalla se inicializa y hace la llamada 
+  /// para obtener los datos de los profesores a través del proveedor CredencialesProvider
   @override
   void initState() {
     super.initState();
@@ -27,6 +31,10 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
     });
   }
 
+  /// Obtiene la lista de profesores
+  ///
+  /// Parámetros:
+  /// - [credencialesProvider]: Proveedor que maneja las credenciales de los usuarios
   Future<void> _fetchProfesores(
       CredencialesProvider credencialesProvider) async {
     setState(() {
@@ -64,6 +72,10 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
     }
   }
 
+  /// Filtra la lista de profesores por nombre y apellidos
+  ///
+  /// Parámetros:
+  /// - [query]: Texto que se usa para filtrar los profesores
   void filterSearchResults(String query) {
     setState(() {
       if (query.isEmpty) {
@@ -78,6 +90,15 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
     });
   }
 
+  /// Construye el widget de la pantalla
+  ///
+  /// Este método construye el diseño de la pantalla que incluye una barra de búsqueda
+  /// en la parte superior y una lista de profesores que se muestran en una lista con tarjetas.
+  /// Cada tarjeta tiene un nombre de profesor y un icono que al hacer clic navega a la pantalla
+  /// de detalles del horario del profesor
+  ///
+  /// Retorna:
+  /// - Un Scaffold que representa la estructura visual de la pantalla
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

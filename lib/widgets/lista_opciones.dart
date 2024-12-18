@@ -13,6 +13,10 @@ class ListaOpciones extends StatefulWidget {
 class _ListaOpcionesState extends State<ListaOpciones> {
   bool esVisible = false;
 
+  /// Un widget de estado que muestra una lista de opciones con funcionalidad de visibilidad
+  ///
+  /// Este widget incluye un botón para abrir un enlace externo, un botón para mostrar u ocultar opciones adicionales, 
+  /// y una lista de opciones desplegables
   @override
   Widget build(BuildContext context) {
     return Column(

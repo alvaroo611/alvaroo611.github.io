@@ -19,6 +19,10 @@ class _HorarioProfesoresDetallesScreenState
   List<HorarioResult> horarioProfesor = [];
   Set<String> asignaturasProfesor = {};
 
+  /// Inicializa el estado de la pantalla y obtiene las credenciales del profesor
+  ///
+  /// Configura el Future para obtener el horario del profesor y la instancia
+  /// del proveedor del centro
   @override
   void initState() {
     super.initState();
@@ -31,12 +35,16 @@ class _HorarioProfesoresDetallesScreenState
 
     // Inicializa el Future con la función asincrónica
     _horarioFuture = _fetchHorario(centroProvider, profesor);
-
-    // Verifica los datos recibidos
-    print("Credenciales: $profesor");
-    print("Centro: $centroProvider");
   }
 
+  /// Método que obtiene el horario del profesor y actualiza la interfaz
+  ///
+  /// Parámetros:
+  /// - [horarioProvider]: El proveedor que maneja los datos del horario
+  /// - [profesor]: Las credenciales del profesor cuyo horario se desea obtener
+  ///
+  /// Retorna:
+  /// - Un Future<void> que se completa cuando el horario del profesor ha sido cargado
   Future<void> _fetchHorario(
     CentroProvider horarioProvider,
     Credenciales profesor,
@@ -52,7 +60,7 @@ class _HorarioProfesoresDetallesScreenState
     if (horarioProfesor.isEmpty) {
       // No hay horario disponible para este profesor
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('No hay horario disponible para este profesor.'),
           duration: Duration(seconds: 2),
         ),
@@ -60,6 +68,15 @@ class _HorarioProfesoresDetallesScreenState
     }
   }
 
+  /// Filtra los horarios del profesor basado en su nombre y apellido
+  ///
+  /// Parámetros:
+  /// - [nombre]: El nombre del profesor a filtrar
+  /// - [apellido]: El apellido del profesor a filtrar
+  /// - [horarios]: La lista completa de horarios de los profesores
+  ///
+  /// Retorna:
+  /// - Una lista de objetos HorarioResult que corresponden al profesor
   List<HorarioResult> obtenerHorarioDelProfesor(
       String nombre, String apellido, List<HorarioResult> horarios) {
     return horarios
@@ -69,10 +86,21 @@ class _HorarioProfesoresDetallesScreenState
         .toList();
   }
 
+  /// Obtiene un conjunto de asignaturas únicas de los horarios
+  ///
+  /// Parámetros:
+  /// - [horarios]: La lista de horarios de los profesores
+  ///
+  /// Retorna:
+  /// - Un Set<String> con las asignaturas únicas de los horarios
   Set<String> _obtenerAsignaturasUnicas(List<HorarioResult> horarios) {
     return horarios.map((horario) => horario.asignatura).toSet();
   }
 
+  /// Construye la interfaz de la pantalla mostrando el horario del profesor
+  ///
+  /// Este método es llamado por el FutureBuilder para construir la vista
+  /// basada en el estado del Future que obtiene el horario del profesor
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +116,7 @@ class _HorarioProfesoresDetallesScreenState
         future: _horarioFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
@@ -146,6 +174,13 @@ class _HorarioProfesoresDetallesScreenState
     );
   }
 
+  /// Construye la fila de días de la semana para la tabla
+  ///
+  /// Parámetros:
+  /// - [diasNombres]: Lista de nombres de los días de la semana
+  ///
+  /// Retorna:
+  /// - Un TableRow que contiene las celdas con los nombres de los días
   TableRow _buildDiasSemana(List<String> diasNombres) {
     return TableRow(
       children: [
@@ -155,6 +190,15 @@ class _HorarioProfesoresDetallesScreenState
     );
   }
 
+  /// Construye una fila de horario en la tabla, con las horas y días correspondientes
+  ///
+  /// Parámetros:
+  /// - [horaDia]: El índice de la hora en la lista de horas
+  /// - [diasOrdenados]: Lista con los días de la semana ordenados
+  /// - [horasOrdenadas]: Lista con las horas ordenadas
+  ///
+  /// Retorna:
+  /// - Un TableRow con las celdas de las horas y los días
   TableRow _buildHorarioRow(
       int horaDia, List<String> diasOrdenados, List<String> horasOrdenadas) {
     String horaInicio = horasOrdenadas[horaDia];
@@ -169,13 +213,28 @@ class _HorarioProfesoresDetallesScreenState
     );
   }
 
+  /// Calcula la hora final basándose en la hora de inicio
+  ///
+  /// Parámetros:
+  /// - [horaInicio]: La hora de inicio en formato "HH:mm"
+  ///
+  /// Retorna:
+  /// - Una cadena con la hora final calculada en formato "HH:mm"
   String _calcularHoraFinal(String horaInicio) {
     final formatoHora = DateFormat("HH:mm");
     DateTime horaInicial = formatoHora.parse(horaInicio);
-    DateTime horaFinal = horaInicial.add(Duration(hours: 1));
+    DateTime horaFinal = horaInicial.add(const Duration(hours: 1));
     return formatoHora.format(horaFinal);
   }
 
+   /// Construye una celda para la tabla, que representa una hora o un día
+   /// 
+  /// Parámetros:
+  /// - [text]: El texto que debe ser mostrado en la celda
+  /// - [isHeader]: Indica si la celda es una cabecera de la tabla
+  ///
+  /// Retorna:
+  /// - Un Widget que representa una celda de la tabla
   Widget _buildTableHeaderCell(String text) {
     return Container(
       color: Colors.blueAccent,
@@ -190,6 +249,16 @@ class _HorarioProfesoresDetallesScreenState
     );
   }
 
+  /// Construye una celda de tabla que puede ser usada tanto para encabezados
+  /// como para celdas normales
+  ///
+  /// Parámetros:
+  /// - [text]: El texto que se mostrará dentro de la celda
+  /// - [isHeader]: Un parámetro opcional que determina si la celda es un encabezado
+  ///   Por defecto es false, si es true, se aplica un estilo especial para el encabezado
+  ///
+  /// Retorna:
+  /// - Un Widget que representa una celda de tabla con el texto proporcionado
   Widget _buildTableCell(String text, {bool isHeader = false}) {
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -206,6 +275,14 @@ class _HorarioProfesoresDetallesScreenState
     );
   }
 
+  /// Construye una celda para cada horario específico en la tabla
+  ///
+  /// Parámetros:
+  /// - [dia]: El día de la semana para el cual se debe mostrar el horario
+  /// - [hora]: La hora específica del horario
+  ///
+  /// Retorna:
+  /// - Un Widget que representa la celda de horario con la asignatura y aula
   Widget _buildHorarioCell(String dia, String hora) {
     String asignatura = '';
     String aula = '';
@@ -245,6 +322,10 @@ class _HorarioProfesoresDetallesScreenState
     );
   }
 
+  /// Construye el contenedor que muestra todas las asignaturas del profesor
+  ///
+  /// Retorna:
+  /// - Un Widget que representa el contenedor con las asignaturas
   Widget _buildAsignaturasContainer() {
     return Container(
       padding: const EdgeInsets.all(16.0),
@@ -282,6 +363,13 @@ class _HorarioProfesoresDetallesScreenState
     );
   }
 
+  /// Obtiene las tres primeras letras de una asignatura.
+  ///
+  /// Parámetros:
+  /// - [asignatura]: El nombre completo de la asignatura
+  ///
+  /// Retorna:
+  /// - Un String con las tres primeras letras de la asignatura en mayúsculas
   String obtenerTresPrimerasLetras(String asignatura) {
     return asignatura.length > 3
         ? asignatura.substring(0, 3).toUpperCase()

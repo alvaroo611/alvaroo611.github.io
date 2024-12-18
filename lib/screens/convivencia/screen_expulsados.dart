@@ -21,7 +21,12 @@ class _ExpulsadosScreenState extends State<ExpulsadosScreen> {
     super.initState();
   }
 
-  // Este método aplica tanto el filtro por fecha como el filtro por búsqueda
+  /// Aplica el filtro de búsqueda y el filtro por fecha
+  ///
+  /// Filtra la lista de expulsados según la fecha seleccionada y el texto de búsqueda
+  ///
+  /// Parámetros:
+  /// - [query]: Texto de búsqueda introducido por el usuario
   void filterSearchResults(String query) {
     setState(() {
       filteredExpulsados = Provider.of<ConvivenciaProvider>(context, listen: false).listaExpulsados;
@@ -227,7 +232,12 @@ Widget build(BuildContext context) {
   );
 }
 
-  // Método para seleccionar la fecha
+  /// Método para seleccionar la fecha en un DatePicker
+  ///
+  /// Abre un selector de fechas y actualiza la fecha seleccionada si es válida
+  ///
+  /// Parámetros:
+  /// - [context]: Contexto de la pantalla
   Future<void> _selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
     final DateTime initialDate = selectedDate ?? now;
@@ -246,7 +256,13 @@ Widget build(BuildContext context) {
     }
   }
 
-  // Método para parsear las fechas con diferentes formatos
+  /// Método para parsear las fechas con diferentes formatos
+  ///
+  /// Parámetros:
+  /// - [date]: Cadena de texto con la fecha a convertir
+  ///
+  /// Retorna:
+  /// - Un objeto DateTime que representa la fecha
   DateTime _parseDate(String date) {
     // Verificar si la fecha está vacía
     if (date.isEmpty) {

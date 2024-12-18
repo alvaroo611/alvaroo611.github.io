@@ -3,6 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:iseneca/providers/providers.dart';
 import 'package:intl/intl.dart';
 
+/// Constructor de la clase DaceScreen
+///
+/// Esta clase crea una pantalla que muestra una lista de actividades extraescolares
+/// con la posibilidad de ver detalles de cada actividad, como la fecha de inicio,
+/// fecha de fin y los alumnos asociados a la actividad
 class DaceScreen extends StatefulWidget {
   const DaceScreen({Key? key}) : super(key: key);
 
@@ -11,6 +16,13 @@ class DaceScreen extends StatefulWidget {
 }
 
 class _DaceScreenState extends State<DaceScreen> {
+  /// Método encargado de construir la interfaz de usuario para la pantalla DaceScreen
+  ///
+  /// Parámetros:
+  /// - [context]: El contexto de la aplicación, necesario para el acceso a datos y la creación de widgets
+  ///
+  /// Retorna:
+  /// - Un widget Scaffold que contiene la estructura de la pantalla
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +40,10 @@ class _DaceScreenState extends State<DaceScreen> {
     );
   }
 
+  /// Método encargado de construir la lista de actividades extraescolares.
+  ///
+  /// Retorna:
+  /// - Un widget ListView que contiene una lista de tarjetas con actividades extraescolares
   Widget _lista() {
     final resultadosDace = Provider.of<DaceProvider>(context);
 
@@ -71,6 +87,10 @@ class _DaceScreenState extends State<DaceScreen> {
     );
   }
 
+  /// Método encargado de mostrar un popup con la lista de alumnos de una actividad
+  /// 
+  /// Parámetros:
+  /// - [alumnos]: Una cadena que contiene los nombres de los alumnos de la actividad
   void _mostrarAlumnosPopup(String alumnos) {
     showDialog(
       context: context,

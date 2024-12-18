@@ -22,6 +22,10 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
   @override
   void initState() {
     super.initState();
+    /// Inicializa la pantalla y realiza la llamada para obtener los datos de los profesores
+    ///
+    /// Después de que el widget se haya montado, se hace la llamada a la función _fetchProfesores
+    /// Se obtiene la lista de profesores y se actualiza la interfaz del usuario
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final credencialesProvider =
           Provider.of<CredencialesProvider>(context, listen: false);
@@ -29,6 +33,13 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
     });
   }
 
+  /// Método asíncrono para obtener la lista de profesores desde el provider
+
+  /// Parámetros:
+  /// - [credencialesProvider]: El provider que para la obtención de credenciales de usuario
+  ///
+  /// Retorna:
+  /// - Actualiza el estado local de la pantalla con la lista de profesores
   Future<void> _fetchProfesores(
       CredencialesProvider credencialesProvider) async {
     setState(() {
@@ -58,6 +69,13 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
     }
   }
 
+  /// Filtra los resultados de la lista de profesores según la consulta de búsqueda
+  /// 
+  /// Parámetros:
+  /// - [query]: El texto que el usuario ingresa en el campo de búsqueda para filtrar los profesores
+  ///
+  /// Retorna:
+  /// - Actualiza la lista de profesores filtrados
   void filterSearchResults(String query) {
     setState(() {
       if (query.isEmpty) {
@@ -182,6 +200,15 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
     );
   }
 
+  /// Muestra un cuadro de diálogo con la información del profesor
+  /// 
+  /// Parámetros:
+  /// - [context]: El contexto actual de la aplicación
+  /// - [index]: El índice del profesor en la lista filtrada
+  /// - [credenciales]: La lista de credenciales de profesores
+  ///
+  /// Retorna:
+  /// - Muestra un cuadro de diálogo con la información del profesor
   void _mostrarAlert(
       BuildContext context, int index, List<Credenciales> credenciales) {
     Credenciales profesor = credenciales[index];
@@ -198,7 +225,7 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
             children: [
               _buildContactInfoRow(Icons.mail, "Correo: ${profesor.usuario}",
                   () => _launchEmail(profesor.usuario)),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildContactInfoRow(
                   Icons.phone,
                   "Teléfono: ${profesor.telefono}",
@@ -216,18 +243,27 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
     );
   }
 
+  /// Construye una fila con el ícono y el texto de la información de contacto
+  /// 
+  /// Parámetros:
+  /// - [icon]: El ícono que se mostrará en la fila (corre, telefono, etc)
+  /// - [text]: El texto que se mostrará junto al ícono (corre, telefono, etc)
+  /// - [onTap]: La acción que se ejecutará al tocar la fila (abrir la aplicación de correo o realizar una llamada, etc)
+  ///
+  /// Retorna:
+  /// - Un Row que contiene el ícono, el texto y el GestureDetector
   Widget _buildContactInfoRow(
       IconData icon, String text, VoidCallback onPressed) {
     return Row(
       children: [
         Icon(icon, color: Colors.blueAccent),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Expanded(
           child: GestureDetector(
             onTap: onPressed,
             child: Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
                 fontSize: 16,
               ),
@@ -237,7 +273,10 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
       ],
     );
   }
-
+  /// Lanza la aplicación de correo para enviar un email al profesor
+  ///
+  /// Parámetros:
+  /// - [email]: La dirección de correo electrónico del profesor
   void _launchEmail(String email) async {
     final Uri _emailLaunchUri = Uri(
       scheme: 'mailto',
@@ -251,6 +290,10 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
     }
   }
 
+  /// Llama al número de teléfono del profesor
+  ///
+  /// Parámetros:
+  /// - [phone]: El número de teléfono del profesor
   void _launchPhone(String phone) async {
     final Uri _phoneLaunchUri = Uri(
       scheme: 'tel',

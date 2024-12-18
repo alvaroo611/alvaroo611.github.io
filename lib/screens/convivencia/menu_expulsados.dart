@@ -3,9 +3,20 @@ import 'package:iseneca/models/expulsados_response.dart';
 import 'package:iseneca/providers/convivencia_provider.dart';
 import 'package:provider/provider.dart';
 
+/// Pantalla que muestra la lista de expulsados
+///
+/// Este widget muestra una lista de expulsados donde cada elemento contiene
+/// el ID del alumno, el curso y el rango de fechas de expulsión
 class MenuExpulsados extends StatelessWidget {
   const MenuExpulsados({Key? key}) : super(key: key);
 
+  /// Construye la interfaz de la pantalla de expulsados
+  ///
+  /// Parámetros:
+  /// - [context]: El contexto de la pantalla actual donde se construye el widget
+  ///
+  /// Retorna:
+  /// - Un widget Scaffold que contiene la estructura visual de la pantalla de expulsados
   @override
   Widget build(BuildContext context) {
     final convivenciaProvider = Provider.of<ConvivenciaProvider>(context);
