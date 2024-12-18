@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iseneca/service/firebase_service.dart';
 
+///Clase google sing out
 class GoogleSignOut extends StatefulWidget {
   const GoogleSignOut({Key? key}) : super(key: key);
 
@@ -10,9 +11,16 @@ class GoogleSignOut extends StatefulWidget {
   GoogleSignOutState createState() => GoogleSignOutState();
 }
 
+///Clase para manejar estado
 class GoogleSignOutState extends State<GoogleSignOut> {
   set isSignedIn(bool isSignedIn) {}
 
+  /// Crea el widget para el botón de cerrar sesión con Google.
+  ///
+  /// Este método construye un botón OutlinedButton con un ícono de Google y la etiqueta "Log Out".
+  ///
+  /// Al presionar el botón, llama al método `signOutFromGoogle` del servicio `FirebaseService`
+  /// para cerrar la sesión del usuario en Google y actualiza el estado `isSignedIn` a `false`.
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

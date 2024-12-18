@@ -16,7 +16,11 @@ class GoogleSignIn extends StatefulWidget {
 class GoogleSignInState extends State<GoogleSignIn> {
   bool isLoading = false;
   late CredencialesProvider credencialesProvider;
-  //init state
+
+  /// Inicializa el estado del widget.
+  ///
+  /// Configura el proveedor de credenciales y carga las credenciales del usuario
+  /// después de un frame de construcción inicial.
   @override
   void initState() {
     super.initState();
@@ -28,7 +32,10 @@ class GoogleSignInState extends State<GoogleSignIn> {
     });
   }
 
-  // Método para cargar las credenciales y reintentar en caso de fallo
+  //// Carga las credenciales del usuario.
+  ///
+  /// Se actualiza el estado de carga y realiza intentos de cargar las credenciales
+  /// con un retardo en caso de fallo.
   void _loadCredenciales() async {
     setState(() {
       isLoading = true;
@@ -126,6 +133,10 @@ class GoogleSignInState extends State<GoogleSignIn> {
           );
   }
 
+  /// Muestra un cuadro de diálogo con un mensaje de error.
+  ///
+  /// Muestra una alerta indicando que no existe ninguna cuenta
+  /// con las credenciales proporcionadas.
   void _mostrarAlert(BuildContext context) {
     showDialog(
       context: context,
@@ -152,6 +163,9 @@ class GoogleSignInState extends State<GoogleSignIn> {
     );
   }
 
+  /// Cierra la sesión actual del usuario.
+  ///
+  /// Utiliza el servicio de autenticación de Firebase para cerrar la sesión.
   void logOut() async {
     await FirebaseAuth.instance.signOut();
   }

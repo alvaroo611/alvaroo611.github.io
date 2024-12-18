@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ServicioScreen extends StatelessWidget {
+  /// Constructor de la pantalla de servicios.
+  ///
+  /// Parámetros:
+  /// - [key]: Una llave que puede ser utilizada para identificar esta pantalla.
+  ///
+
   const ServicioScreen({Key? key}) : super(key: key);
   //
   @override

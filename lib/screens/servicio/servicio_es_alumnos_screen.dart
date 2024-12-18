@@ -5,6 +5,8 @@ import 'package:iseneca/providers/providers.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+/// Pantalla que muestra la lista de estudiantes asociados a un curso específico.
+/// Permite seleccionar a un estudiante para realizar acciones relacionadas con su asistencia.
 class ServicioESAlumnosScreen extends StatefulWidget {
   const ServicioESAlumnosScreen({Key? key}) : super(key: key);
 
@@ -13,6 +15,8 @@ class ServicioESAlumnosScreen extends StatefulWidget {
       _ServicioESAlumnosScreenState();
 }
 
+/// Estado de la clase `ServicioESAlumnosScreen`.
+/// Maneja la carga de datos y la interacción del usuario con la lista de estudiantes.
 class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
   bool isLoading = false;
   bool isIdaPressed = false;
@@ -31,6 +35,9 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
     _loadStudents();
   }
 
+  /// Carga la lista de estudiantes desde el proveedor de datos.
+  ///
+  /// Establece `isLoading` en `true` antes de iniciar la carga y a `false` después de finalizar la carga de datos.
   Future<void> _loadStudents() async {
     setState(() {
       isLoading = true;
@@ -148,11 +155,14 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
   }
 }
 
+/// Dialogo de botones que permite realizar acciones de entrada y salida para un estudiante.
+/// Muestra botones para marcar la entrada y salida del estudiante.
 class DialogoBotones extends StatefulWidget {
   final ServicioProvider servicio;
   final TextEditingController controllerTextoNombreAlumno;
   final Student student;
 
+  ///CONSTRUCTOR
   DialogoBotones({
     required this.servicio,
     required this.controllerTextoNombreAlumno,
@@ -163,6 +173,8 @@ class DialogoBotones extends StatefulWidget {
   _DialogoBotonesState createState() => _DialogoBotonesState();
 }
 
+/// Estado del `DialogoBotones`.
+/// Maneja la interacción del usuario con los botones de entrada y salida para el estudiante.
 class _DialogoBotonesState extends State<DialogoBotones> {
   bool isIdaPressed = false;
   bool isVueltaPressed = false;

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/screens/screens.dart';
 
+/// Pantalla principal de la aplicación.
+///
+/// Esta pantalla gestiona el control del `PageView` que permite navegar entre las pantallas Home y Agenda.
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -44,7 +47,8 @@ class _MainScreenState extends State<MainScreen> {
           onTap: (value) {
             pageIndex = value;
             controller.animateToPage(value,
-                duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.ease);
           },
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
@@ -54,6 +58,10 @@ class _MainScreenState extends State<MainScreen> {
         ));
   }
 
+  /// Actualiza el índice de la barra de navegación inferior.
+  ///
+  /// Este método se llama cada vez que se cambia la página en el `PageView`,
+  /// y actualiza el índice `navBarIndex` para reflejar la nueva página.
   setNavBarIndex(int index) {
     setState(() {
       navBarIndex = index;

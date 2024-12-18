@@ -27,6 +27,13 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
   late List<Servicio> servicioList = [];
   late ServicioProvider servicioProvider;
 
+  /// Inicializa el widget, obteniendo la instancia del proveedor de servicios y cargando los datos iniciales.
+  ///
+  /// Parámetros:
+  /// - Ninguno.
+  ///
+  /// Retorna:
+  /// - Nada.
   @override
   void initState() {
     super.initState();
@@ -34,9 +41,24 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
     _fetchData();
   }
 
+  /// Carga los servicios de los alumnos desde el proveedor de servicios.
+  ///
+  /// Parámetros:
+  /// - Ninguno.
+  ///
+  /// Retorna:
+  /// - Nada.
   Future<void> _fetchData() async {
     await servicioProvider.getAlumnosServicio(context);
   }
+
+  /// Calcula el número de repeticiones de un alumno en el día actual.
+  ///
+  /// Parámetros:
+  /// - [nombreAlumno]: Nombre del alumno a calcular las repeticiones.
+  ///
+  /// Retorna:
+  /// - `int` - Número de repeticiones del alumno.
 
   int _calcularRepeticiones(String nombreAlumno) {
     int num = 0;
@@ -53,6 +75,14 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
     return num;
   }
 
+  /// Muestra un selector de fecha según el modo (`Inicio` o `Fin`).
+  ///
+  /// Parámetros:
+  /// - [modo]: Modo en el que se muestra la fecha (`Inicio` o `Fin`).
+  /// - [context]: Contexto en el que se muestra el selector de fecha.
+  ///
+  /// Retorna:
+  /// - Nada.
   Future<void> mostrarFecha(String modo, BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -77,36 +107,54 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
     }
   }
 
+  /// Carga los nombres de los alumnos filtrados según las fechas seleccionadas.
+  ///
+  /// Parámetros:
+  /// - [context]: Contexto en el que se ejecuta el método.
+  /// - [fechaInicio]: Fecha de inicio seleccionada.
+  /// - [fechaFin]: Fecha de fin seleccionada.
+  ///
+  /// Retorna:
+  /// - Nada.
   Future<void> _loadNombresAlumnos(
-    BuildContext context, DateTime fechaInicio, DateTime fechaFin) async {
-  setState(() {
-    isLoading = true;
-  });
-  try {
-    servicioList = await servicioProvider.getServiciosPorFecha(fechaInicio, fechaFin);
-
-    // Obtener nombres únicos usando un conjunto (Set)
-    Set<String> nombresUnicos = servicioList.map((servicio) => servicio.nombreAlumno).toSet();
-
+      BuildContext context, DateTime fechaInicio, DateTime fechaFin) async {
     setState(() {
-      listaAlumnosFechas = servicioList;
-      listaAlumnosNombres = nombresUnicos.toList(); // Convertir Set a List
-      alumnosFiltrados = List.from(listaAlumnosNombres);
-      size = listaAlumnosNombres.length;
-      print("Datos cargados: $alumnosFiltrados"); // Debugging output
+      isLoading = true;
     });
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error al cargar estudiantes por fecha.')));
-    print('Failed to load students: $e');
-  } finally {
-    setState(() {
-      isLoading = false;
-    });
+    try {
+      servicioList =
+          await servicioProvider.getServiciosPorFecha(fechaInicio, fechaFin);
+
+      // Obtener nombres únicos usando un conjunto (Set)
+      Set<String> nombresUnicos =
+          servicioList.map((servicio) => servicio.nombreAlumno).toSet();
+
+      setState(() {
+        listaAlumnosFechas = servicioList;
+        listaAlumnosNombres = nombresUnicos.toList(); // Convertir Set a List
+        alumnosFiltrados = List.from(listaAlumnosNombres);
+        size = listaAlumnosNombres.length;
+        print("Datos cargados: $alumnosFiltrados"); // Debugging output
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al cargar estudiantes por fecha.')));
+      print('Failed to load students: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
-}
 
-  // Método para filtrar alumnos por nombre
+  /// Filtra la lista de nombres de alumnos según la consulta de búsqueda ingresada.
+  ///
+  /// Parámetros:
+  /// - [query]: Consulta de búsqueda ingresada por el usuario.
+  ///
+  /// Retorna:
+  /// - Nada.
+
   void filtrarAlumnos(String query) {
     setState(() {
       if (query.isEmpty) {

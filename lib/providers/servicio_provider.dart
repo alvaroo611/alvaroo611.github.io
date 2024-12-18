@@ -15,6 +15,17 @@ class ServicioProvider extends ChangeNotifier {
   ServicioProvider() {
     debugPrint("Servicio Provider inicializado");
   }
+
+  /// Obtiene los datos de los servicios por un nombre de alumno desde un servicio remoto.
+  ///
+  /// Este método filtra los servicios almacenados localmente basados en el nombre del alumno proporcionado
+  /// y retorna una lista con los servicios correspondientes.
+  ///
+  /// Parámetros:
+  /// - `nombreAlumno`: El nombre del alumno para filtrar los servicios.
+  ///
+  /// Devuelve:
+  /// - Una lista de objetos `Servicio` correspondientes al alumno especificado.
   Future<List<Servicio>> getServiciosPorAlumno(String nombreAlumno) async {
     List<Servicio> serviciosAlumno = listadoAlumnosServicio
         .where((servicio) => servicio.nombreAlumno == nombreAlumno)
@@ -22,6 +33,15 @@ class ServicioProvider extends ChangeNotifier {
 
     return serviciosAlumno;
   }
+
+  /// Obtiene los datos de todos los servicios desde un servicio remoto.
+  ///
+  /// Realiza una solicitud HTTP a la URL de la hoja de cálculo de Google Sheets
+  /// y procesa los datos recibidos para actualizarlos localmente.
+  /// Notifica a los widgets interesados que los datos han cambiado.
+  ///
+  /// Parámetros:
+  /// - `context`: El contexto de la aplicación para mostrar mensajes emergentes en caso de error.
 
   Future<void> getAlumnosServicio(BuildContext context) async {
     final url = Uri.parse(
@@ -46,6 +66,17 @@ class ServicioProvider extends ChangeNotifier {
     }
   }
 
+  /// Obtiene los servicios de un alumno dentro de un rango de fechas.
+  ///
+  /// Filtra los servicios almacenados localmente basados en las fechas de entrada
+  /// y salida proporcionadas. Retorna una lista de servicios que se ajustan al rango de fechas.
+  ///
+  /// Parámetros:
+  /// - `fechaInicio`: La fecha de inicio del rango para filtrar los servicios.
+  /// - `fechaFin`: La fecha de fin del rango para filtrar los servicios.
+  ///
+  /// Devuelve:
+  /// - Una lista de objetos `Servicio` que están dentro del rango de fechas especificado.
   Future<List<Servicio>> getServiciosPorFecha(
       DateTime fechaInicio, DateTime fechaFin) async {
     List<Servicio> serviciosEnRango = listadoAlumnosServicio.where((servicio) {
@@ -60,6 +91,19 @@ class ServicioProvider extends ChangeNotifier {
     return serviciosEnRango;
   }
 
+  /// Envía los datos de un servicio a través de un servicio remoto.
+  ///
+  /// Este método prepara una solicitud HTTP con los datos proporcionados (nombre del alumno,
+  /// fechas de entrada y salida, horas de entrada y salida) y los envía a la hoja de cálculo de Google Sheets.
+  /// Notifica al usuario con un mensaje emergente si la operación fue exitosa o falló.
+  ///
+  /// Parámetros:
+  /// - `nombreAlumno`: El nombre del alumno.
+  /// - `fechaEntrada`: La fecha de entrada del servicio.
+  /// - `horaEntrada`: La hora de entrada del servicio.
+  /// - `fechaSalida`: La fecha de salida del servicio.
+  /// - `horaSalida`: La hora de salida del servicio.
+  /// - `context`: El contexto de la aplicación para mostrar mensajes emergentes.
   Future<void> sendData(
       String nombreAlumno,
       String fechaEntrada,
@@ -99,12 +143,33 @@ class ServicioProvider extends ChangeNotifier {
     }
   }
 
+  /// Muestra un mensaje emergente en la pantalla principal.
+  ///
+  /// Este método se utiliza para mostrar un `SnackBar` con un mensaje proporcionado
+  /// en la parte inferior de la pantalla, útil para notificar al usuario de diferentes eventos.
+  ///
+  /// Parámetros:
+  /// - `message`: El mensaje que se debe mostrar en el `SnackBar`.
+  /// - `context`: El contexto de la aplicación donde se mostrará el `SnackBar`.
   void showSnackBar(String message, BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
   }
 
+  /// Configura los datos de un alumno en una hoja de cálculo de Google Sheets.
+  ///
+  /// Prepara una solicitud HTTP con los datos proporcionados para enviarlos a la hoja de cálculo.
+  /// Este método se utiliza para actualizar los datos de los servicios de un alumno específico.
+  ///
+  /// Parámetros:
+  /// - `baseurl`: La URL base del script de Google Sheets.
+  /// - `api`: El identificador del script.
+  /// - `pagina`: El identificador de la hoja de cálculo.
+  /// - `hoja`: El nombre de la hoja dentro del archivo de Google Sheets.
+  /// - `nombre`: El nombre del alumno.
+  /// - `fechaEntrada`: La fecha de entrada del servicio.
+  /// - `fechaSalida`: La fecha de salida del servicio.
   Future<void> _setAlumnos(
       String baseurl,
       String api,

@@ -4,6 +4,13 @@ import 'package:iseneca/service/services.dart';
 
 Size size = Size.zero;
 
+/// Pantalla de inicio de sesión.
+///
+/// Inhabilita el botón del dispositivo para volver atrás cuando se encuentra en esta pantalla.
+/// La pantalla está compuesta por un `Scaffold` que contiene:
+/// - `Background`: Un widget de fondo con un gradiente.
+/// - `Content`: Contiene el contenido principal de la pantalla, como el título de la aplicación, el botón para iniciar sesión con Google y el logo de la versión.
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -26,6 +33,9 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
+/// Widget de fondo para la pantalla de inicio de sesión.
+///
+/// Este widget crea un `Container` con un gradiente de colores que va desde azul claro en la parte superior hasta azul marino en la parte inferior.
 class Background extends StatelessWidget {
   const Background({super.key});
 
@@ -44,6 +54,7 @@ class Background extends StatelessWidget {
   }
 }
 
+///Content
 class Content extends StatefulWidget {
   const Content({super.key});
 
@@ -51,8 +62,14 @@ class Content extends StatefulWidget {
   ContentState createState() => ContentState();
 }
 
+///Estado de content
 class ContentState extends State<Content> {
-
+  // Método para construir el contenido de la pantalla.
+  ///
+  /// El contenido incluye:
+  /// - `TextoAplicacion`: Título de la aplicación.
+  /// - `GoogleSignIn`: Botón para iniciar sesión con Google.
+  /// - `LogoVersion`: Logo de la versión y detalles de la aplicación.
   @override
   Widget build(BuildContext context) {
     return SafeArea(

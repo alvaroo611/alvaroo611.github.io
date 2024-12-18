@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:iseneca/providers/alumno_provider.dart';
 import 'package:iseneca/models/Student.dart';
 
+/// Pantalla principal que muestra la lista de cursos disponibles para los estudiantes.
 class ServicioESScreen extends StatefulWidget {
   const ServicioESScreen({Key? key}) : super(key: key);
 
@@ -26,6 +27,10 @@ class _ServicioESScreenState extends State<ServicioESScreen> {
     });
   }
 
+  /// Carga los estudiantes desde el proveedor.
+  ///
+  /// Realiza una solicitud al proveedor para obtener los datos de los estudiantes.
+  /// Actualiza la lista de estudiantes y los cursos únicos disponibles.
   Future<void> _loadStudents() async {
     try {
       await _providerAlumno.fetchData(context);
@@ -41,6 +46,9 @@ class _ServicioESScreenState extends State<ServicioESScreen> {
     }
   }
 
+  /// Filtra los resultados de búsqueda en función de la consulta proporcionada.
+  ///
+  /// [query] La consulta de búsqueda que se utilizará para filtrar los cursos.
   void filterSearchResults(String query) {
     setState(() {
       cursosUnicos = listadoAlumnos

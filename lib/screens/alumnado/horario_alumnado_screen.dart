@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:iseneca/providers/providers.dart';
 
+/// Pantalla de Horario Alumnado.
+///
+/// Esta pantalla permite a los usuarios buscar y seleccionar cursos para
+/// ver los detalles del horario de los estudiantes. Utiliza un `TextEditingController`
+/// para manejar la búsqueda y proporciona una lista filtrada de cursos disponibles.
+///
+/// Parámetros:
+/// - `key`: Clave opcional para el widget, usada para identificar y actualizar el widget.
 class HorarioAlumnadoScreen extends StatefulWidget {
   const HorarioAlumnadoScreen({Key? key}) : super(key: key);
 
@@ -14,6 +22,8 @@ class _HorarioAlumnadoScreenState extends State<HorarioAlumnadoScreen> {
   List<String> cursosUnicos = []; // Lista original de cursos
   List<String> cursosFiltrados = []; // Lista filtrada de cursos
 
+  // Método que se llama cuando el widget se ha inicializado en el árbol de widgets.
+  // Aquí se configuran las variables necesarias y se preparan los datos para el estado del widget.
   @override
   void initState() {
     super.initState();
@@ -25,6 +35,9 @@ class _HorarioAlumnadoScreenState extends State<HorarioAlumnadoScreen> {
         List.from(cursosUnicos); // Inicializamos con todos los cursos
   }
 
+  /// Filtra los resultados de búsqueda según la consulta ingresada.
+  ///
+  /// - `query`: la cadena de texto ingresada por el usuario para realizar la búsqueda.
   void filterSearchResults(String query) {
     if (query.isNotEmpty) {
       setState(() {
@@ -141,6 +154,8 @@ class _HorarioAlumnadoScreenState extends State<HorarioAlumnadoScreen> {
     );
   }
 
+  /// Método que se llama cuando el widget se elimina del árbol de widgets.
+  /// Aquí se liberan los recursos utilizados por los objetos que están en uso dentro del widget.
   @override
   void dispose() {
     _controller.dispose();

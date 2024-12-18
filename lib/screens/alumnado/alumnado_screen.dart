@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/// Pantalla de Alumnado.
+///
+/// Esta pantalla muestra una lista de opciones relacionadas con el alumnado,
+/// incluyendo enlaces a contactos, localización y horarios. Cada opción es un
+/// `GestureDetector` envuelto en un `Card` con un `ListTile`.
+///
+///
+
 class AlumnadoScreen extends StatelessWidget {
   const AlumnadoScreen({Key? key}) : super(key: key);
 

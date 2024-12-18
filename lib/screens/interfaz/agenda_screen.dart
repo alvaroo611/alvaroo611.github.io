@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iseneca/widgets/lista_opciones.dart';
 
-
+//Clase actualizada horario quitado por quela dependencia que se utilizaba no es compatible con la compilacion a web
 class AgendaScreen extends StatelessWidget {
   const AgendaScreen({Key? key}) : super(key: key);
 

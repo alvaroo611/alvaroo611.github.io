@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:iseneca/models/servicio_response.dart'; // Asegúrate de que esta importación sea correcta
 import 'package:iseneca/providers/servicio_provider.dart';
 
+/// Pantalla que muestra la lista de estudiantes asociados a un curso específico.
+/// Permite seleccionar a un estudiante para realizar acciones relacionadas con su asistencia.
 class ServicioInformesDetallesScreen extends StatefulWidget {
   const ServicioInformesDetallesScreen({Key? key}) : super(key: key);
 
@@ -11,6 +13,8 @@ class ServicioInformesDetallesScreen extends StatefulWidget {
       _ServicioInformesDetallesScreenState();
 }
 
+/// Estado de la clase `ServicioESAlumnosScreen`.
+/// Maneja la carga de datos y la interacción del usuario con la lista de estudiantes.
 class _ServicioInformesDetallesScreenState
     extends State<ServicioInformesDetallesScreen> {
   List<Servicio> servicios =
@@ -24,6 +28,10 @@ class _ServicioInformesDetallesScreenState
       _loadData();
     });
   }
+
+  /// Carga la lista de estudiantes desde el proveedor de datos.
+  ///
+  /// Establece `isLoading` en `true` antes de iniciar la carga y a `false` después de finalizar la carga de datos.
 
   Future<void> _loadData() async {
     final nombreAlumno = ModalRoute.of(context)!.settings.arguments

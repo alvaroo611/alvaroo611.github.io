@@ -4,6 +4,14 @@ import 'package:iseneca/models/alumnos_response.dart';
 import 'package:iseneca/providers/providers.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+/// Pantalla de Contacto Alumnado.
+///
+/// Esta pantalla permite a los usuarios buscar y seleccionar cursos de los
+/// estudiantes para obtener detalles de contacto. Utiliza un `TextEditingController`
+/// para manejar la búsqueda y proporciona una lista filtrada de cursos.
+///
+/// Parámetros:
+/// - `key`: Clave opcional para el widget, usada para identificar y actualizar el widget.
 class ContactoDetallesAlumnadoScreen extends StatefulWidget {
   const ContactoDetallesAlumnadoScreen({Key? key}) : super(key: key);
 
@@ -12,12 +20,18 @@ class ContactoDetallesAlumnadoScreen extends StatefulWidget {
       _ContactoDetallesAlumnadoScreenState();
 }
 
+/// Estado de la pantalla de Contacto Alumnado.
+///
+/// Gestiona la lógica para inicializar la lista de cursos, manejar la búsqueda
+/// y construir la interfaz de usuario.
 class _ContactoDetallesAlumnadoScreenState
     extends State<ContactoDetallesAlumnadoScreen> {
   List<DatosAlumnos> listaAlumnos = [];
   List<DatosAlumnos> alumnosFiltrados = [];
   TextEditingController _controller = TextEditingController();
 
+  /// Método que se llama cuando el widget se ha inicializado en el árbol de widgets.
+  /// Aquí se configuran las variables necesarias y se preparan los datos para el estado del widget.
   @override
   void initState() {
     super.initState();
@@ -38,6 +52,9 @@ class _ContactoDetallesAlumnadoScreenState
     });
   }
 
+  /// Filtra los resultados de búsqueda según la consulta ingresada.
+  ///
+  /// - `query`: la cadena de texto ingresada por el usuario para realizar la búsqueda.
   void filterSearchResults(String query) {
     setState(() {
       if (query.isEmpty) {
@@ -162,6 +179,16 @@ class _ContactoDetallesAlumnadoScreenState
             ),
     );
   }
+
+  /// Muestra un cuadro de diálogo con la información de contacto de un alumno.
+  ///
+  /// Este método se invoca al seleccionar un alumno y muestra su nombre junto con los detalles de contacto (correo y teléfonos de alumno, padre y madre).
+  /// La información se presenta en filas dentro del cuadro de diálogo, cada una con un icono correspondiente a la acción de llamada o correo.
+  ///
+  /// Parámetros:
+  /// - `context`: El contexto en el que se mostrará el cuadro de diálogo.
+  /// - `index`: El índice del alumno seleccionado en la lista.
+  /// - `listaAlumnos`: Lista de alumnos que contiene la información de contacto del alumno.
 
   void _mostrarAlert(
       BuildContext context, int index, List<DatosAlumnos> listaAlumnos) {

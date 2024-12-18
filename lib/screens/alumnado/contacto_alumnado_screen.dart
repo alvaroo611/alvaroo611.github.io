@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:iseneca/providers/providers.dart';
 
+/// Pantalla de Contacto Alumnado.
+///
+/// Esta pantalla permite a los usuarios buscar y seleccionar cursos de los
+/// estudiantes para obtener detalles de contacto. Utiliza un `TextEditingController`
+/// para manejar la búsqueda y proporciona una lista filtrada de cursos.
+///
+/// Parámetros:
+/// - `key`: Clave opcional para el widget, usada para identificar y actualizar el widget.
 class ContactoAlumnadoScreen extends StatefulWidget {
   const ContactoAlumnadoScreen({Key? key}) : super(key: key);
 
@@ -9,28 +17,39 @@ class ContactoAlumnadoScreen extends StatefulWidget {
   _ContactoAlumnadoScreenState createState() => _ContactoAlumnadoScreenState();
 }
 
+/// Estado de la pantalla de Contacto Alumnado.
+///
+/// Gestiona la lógica para inicializar la lista de cursos, manejar la búsqueda
+/// y construir la interfaz de usuario.
 class _ContactoAlumnadoScreenState extends State<ContactoAlumnadoScreen> {
   List<String> cursosUnicos = [];
   List<String> cursosFiltrados = [];
   TextEditingController _controller = TextEditingController();
 
+  // Método que se llama cuando el widget se ha inicializado en el árbol de widgets.
+  // Aquí se configuran las variables necesarias y se preparan los datos para el estado del widget.
   @override
   void initState() {
     super.initState();
     // Inicializa la lista de cursos al inicio
-    final alumnadoProvider = Provider.of<AlumnadoProvider>(context, listen: false);
+    final alumnadoProvider =
+        Provider.of<AlumnadoProvider>(context, listen: false);
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
 
-    cursosUnicos = listadoAlumnos.map((student) => student.curso).toSet().toList();
-    cursosFiltrados = List.from(cursosUnicos); // Al principio, no se ha filtrado nada
+    cursosUnicos =
+        listadoAlumnos.map((student) => student.curso).toSet().toList();
+    cursosFiltrados =
+        List.from(cursosUnicos); // Al principio, no se ha filtrado nada
   }
 
+  /// Filtra los resultados de búsqueda según la consulta ingresada.
+  ///
+  /// - `query`: la cadena de texto ingresada por el usuario para realizar la búsqueda.
   void filterSearchResults(String query) {
     if (query.isNotEmpty) {
       setState(() {
         cursosFiltrados = cursosUnicos
-            .where((curso) =>
-                curso.toLowerCase().contains(query.toLowerCase()))
+            .where((curso) => curso.toLowerCase().contains(query.toLowerCase()))
             .toList();
       });
     } else {
