@@ -195,6 +195,8 @@ Crea un nuevo repositorio en GitHub y sube tu proyecto. Cambia el nombre del rep
 
 14. **Configuración del Repositorio**
 En la configuración del repositorio, añade el token a Secrets y Variables del proyecto, así como a los secretos del repositorio y a Environments.
+![alt text](assets/image-1.png)
+![alt text](assets/image-2.png)
 
 15. **Crear una Nueva Rama en el Repositorio**
 Ve a Configuración del Repositorio > Pages y cambia de none a Deploy from a branch. Añade la nueva rama que creaste.
