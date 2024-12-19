@@ -3,9 +3,9 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"assets/AssetManifest.bin": "527e93a1306b7cdaba38622851749cf4",
-"assets/AssetManifest.bin.json": "bd62774054169bfe7d0b798cb799f4be",
-"assets/AssetManifest.json": "8dfb7edc4cbdb188dc94010dbbf9985c",
+const RESOURCES = {"assets/AssetManifest.bin": "a2d6594905def8cbfd1a8b5e44a405be",
+"assets/AssetManifest.bin.json": "56dec85eeda4ea27a76dcc0ec8f56779",
+"assets/AssetManifest.json": "6a687ae2210c86ceda708710e2cb18ea",
 "assets/assets/AlumnadoCentroUnidad.csv": "38352d2886591c9cb7f4be4d7fb47b1a",
 "assets/assets/banio.png": "f7277892f8496c8c1ab3b6e615a44679",
 "assets/assets/calendario.png": "40faf660f1fbe5d14506d376ea50a995",
@@ -17,6 +17,8 @@ const RESOURCES = {"assets/AssetManifest.bin": "527e93a1306b7cdaba38622851749cf4
 "assets/assets/horario.json": "99ee74d4a76ce1561f162a9c933cb845",
 "assets/assets/horario.xml": "21f944d44f69845fd546dc8369ba2bae",
 "assets/assets/iconoJunta.png": "cc415d01036f9761972083c45b1ebf57",
+"assets/assets/image-1.png": "f2ca499530a732540ad2c3b1d895b26a",
+"assets/assets/image-2.png": "f2ca499530a732540ad2c3b1d895b26a",
 "assets/assets/profesor.png": "7a330664f81531b1d6f83152e1984084",
 "assets/assets/sombrero.png": "e68bb81775704b55e8f6d941c4a91dbf",
 "assets/FontManifest.json": "5a32d4310a6f5d9a6b651e75ba0d7372",
@@ -41,13 +43,13 @@ const RESOURCES = {"assets/AssetManifest.bin": "527e93a1306b7cdaba38622851749cf4
 "canvaskit/skwasm_st.wasm": "3179a61ea4768a679dbbe30750d75214",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "flutter.js": "76f08d47ff9f5715220992f993002504",
-"flutter_bootstrap.js": "3c29f266556ec29154f0facb093e5801",
+"flutter_bootstrap.js": "190f120b202c7fff0d26b0fc1cbeedde",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "cd9dea094b4bc99a3975cea676c9d5ad",
-"/": "cd9dea094b4bc99a3975cea676c9d5ad",
+"index.html": "55c4db7ee76d25ff45c86064e296b432",
+"/": "55c4db7ee76d25ff45c86064e296b432",
 "main.dart.js": "ca01f1b96e5db1ad48139c6ad77ac8e1",
 "manifest.json": "622c50cba642ea55987fdb68bf755be2",
 "version.json": "af827c7c11647a0f1d35b65e780e2391"};
